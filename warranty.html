@@ -183,7 +183,7 @@
     if(!str) return null;
     const parts = str.split('/');
     if(parts.length===3){
-      let [m,d,y] = parts.map(Number);
+      let [d,m,y] = parts.map(Number);
       if(y>2400) y -= 543; // แปลง พ.ศ. → ค.ศ.
       return new Date(y,m-1,d);
     }

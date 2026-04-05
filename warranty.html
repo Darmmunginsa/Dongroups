@@ -198,9 +198,6 @@
     return new Date(y, m - 1, d);
   }
 
-  // fallback
-  const d = new Date(value);
-  return isNaN(d) ? null : d;
 }
 
   function formatDate(d) {

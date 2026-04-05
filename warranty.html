@@ -269,12 +269,8 @@
 
     const customer = row.c[COL.customer]?.v || '-';
     const brand    = COL.brand!=null ? (row.c[COL.brand]?.v || '-') : null;
-    const instDate = parseThaiDate(
-    row.c[COL.installed]?.v ?? row.c[COL.installed]?.f
-    );
-    const expDate = parseThaiDate(
-    row.c[COL.expiry]?.v ?? row.c[COL.expiry]?.f
-    );
+    const instDate = parseThaiDate(row.c[COL.installed]?.v ?? row.c[COL.installed]?.f);
+    const expDate = parseThaiDate(row.c[COL.expiry]?.v ?? row.c[COL.expiry]?.f);
 
     const today = new Date(); today.setHours(0,0,0,0);
     const daysLeft = expDate ? Math.round((expDate-today)/(1000*60*60*24)) : null;

@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ===== SEO Meta Tags ===== -->
+  <title>D On Groups | บริการเปลี่ยนแบตเตอรี่ UPS และ PM ทุกรุ่น ทุกยี่ห้อ</title>
+  <meta name="description" content="บริการเปลี่ยนแบตเตอรี่เครื่องสำรองไฟ (UPS) และ PM ตรวจสอบประสิทธิภาพ ทุกรุ่น ทุกยี่ห้อ โดยช่างมืออาชีพ ฟรีตรวจสอบเบื้องต้น โทร 091-519-2945" />
+  <meta name="keywords" content="เปลี่ยนแบตเตอรี่ UPS, ซ่อม UPS, PM UPS, เครื่องสำรองไฟ, battery UPS, APC, Eaton, Schneider, บริการ UPS" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://www.dongroups.com/" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="D On Groups | บริการเปลี่ยนแบตเตอรี่ UPS ทุกรุ่น ทุกยี่ห้อ" />
+  <meta property="og:description" content="ช่างมืออาชีพ ฟรีตรวจสอบเครื่อง ฟรีทำความสะอาด แจ้งเตือนรอบเปลี่ยนแบต" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.dongroups.com/" />
+  <meta property="og:locale" content="th_TH" />
+
+  <!-- Schema.org Local Business -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "D On Groups",
+    "description": "บริการเปลี่ยนแบตเตอรี่ UPS และ PM ตรวจสอบประสิทธิภาพเครื่องสำรองไฟ ทุกรุ่น ทุกยี่ห้อ",
+    "url": "https://www.dongroups.com",
+    "telephone": "+66-91-519-2945",
+    "email": "admin@dongroups.com",
+    "priceRange": "฿฿",
+    "openingHours": "Mo-Su 00:00-24:00",
+    "sameAs": ["https://page.line.me/624izvff"]
+  }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:    #0b1e3d;
+      --navy2:   #112550;
+      --navy3:   #1a3266;
+      --amber:   #f5a623;
+      --amber2:  #ffc14d;
+      --white:   #ffffff;
+      --off:     #f4f6fb;
+      --text:    #1e2d4e;
+      --muted:   #5a6a8a;
+      --border:  #dce3f0;
+      --success: #1d9e75;
+      --font:    'Noto Sans Thai', 'Sarabun', sans-serif;
+      --radius:  12px;
+      --shadow:  0 4px 24px rgba(11,30,61,.10);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.7;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--navy);
+      padding: 0 5vw;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+      box-shadow: 0 2px 16px rgba(0,0,0,.25);
+    }
+    .nav-brand {
+      font-size: 1.25rem; font-weight: 700;
+      color: var(--white); letter-spacing: -.3px;
+    }
+    .nav-brand span { color: var(--amber); }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a {
+      color: rgba(255,255,255,.8); font-size: .9rem; font-weight: 500;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--amber); }
+    .nav-cta {
+      background: var(--amber); color: var(--navy) !important;
+      padding: .45rem 1.2rem; border-radius: 8px;
+      font-weight: 700 !important; font-size: .88rem !important;
+      transition: background .2s !important;
+    }
+    .nav-cta:hover { background: var(--amber2) !important; color: var(--navy) !important; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: .3s; }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--navy);
+      padding: 80px 5vw 90px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(245,166,35,.15); color: var(--amber);
+      border: 1px solid rgba(245,166,35,.35);
+      padding: .35rem 1rem; border-radius: 99px;
+      font-size: .82rem; font-weight: 600; letter-spacing: .4px;
+      margin-bottom: 1.25rem;
+    }
+    .hero-badge::before { content: ''; width: 8px; height: 8px; background: var(--amber); border-radius: 50%; }
+    .hero h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700; color: var(--white);
+      line-height: 1.3; margin-bottom: 1.25rem;
+    }
+    .hero h1 em { color: var(--amber); font-style: normal; }
+    .hero p {
+      color: rgba(255,255,255,.72); font-size: 1rem;
+      max-width: 480px; margin-bottom: 2rem;
+    }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--amber); color: var(--navy);
+      padding: .75rem 1.8rem; border-radius: var(--radius);
+      font-weight: 700; font-size: .95rem;
+      transition: background .2s, transform .15s;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary:hover { background: var(--amber2); transform: translateY(-2px); }
+    .btn-outline {
+      border: 1.5px solid rgba(255,255,255,.35); color: var(--white);
+      padding: .75rem 1.8rem; border-radius: var(--radius);
+      font-weight: 600; font-size: .95rem;
+      transition: border-color .2s, background .2s;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-outline:hover { border-color: var(--amber); background: rgba(245,166,35,.08); }
+
+    .hero-card {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 20px;
+      padding: 2rem;
+      backdrop-filter: blur(8px);
+    }
+    .hero-card-title { color: rgba(255,255,255,.6); font-size: .8rem; font-weight: 500; margin-bottom: 1.25rem; letter-spacing: .5px; text-transform: uppercase; }
+    .checklist { list-style: none; display: flex; flex-direction: column; gap: .75rem; }
+    .checklist li {
+      display: flex; align-items: flex-start; gap: .75rem;
+      color: rgba(255,255,255,.85); font-size: .92rem;
+    }
+    .check-icon {
+      width: 20px; height: 20px; min-width: 20px;
+      background: rgba(29,158,117,.2); border: 1px solid rgba(29,158,117,.5);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      margin-top: 2px;
+    }
+    .check-icon svg { width: 11px; height: 11px; stroke: #4ee8b0; }
+    .hero-divider { border: none; border-top: 1px solid rgba(255,255,255,.12); margin: 1.5rem 0; }
+    .hero-contact { display: flex; flex-direction: column; gap: .6rem; }
+    .hero-contact a {
+      display: inline-flex; align-items: center; gap: .5rem;
+      color: var(--amber); font-weight: 600; font-size: .95rem;
+      transition: opacity .2s;
+    }
+    .hero-contact a:hover { opacity: .8; }
+
+    /* ── STATS ── */
+    .stats-bar {
+      background: var(--amber);
+      padding: 1.25rem 5vw;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
+    }
+    .stat-item { text-align: center; }
+    .stat-num { font-size: 1.6rem; font-weight: 700; color: var(--navy); }
+    .stat-label { font-size: .78rem; font-weight: 500; color: rgba(11,30,61,.65); }
+
+    /* ── SECTION BASE ── */
+    section { padding: 72px 5vw; }
+    .section-tag {
+      display: inline-block;
+      background: rgba(245,166,35,.12); color: #c47d00;
+      border: 1px solid rgba(245,166,35,.3);
+      padding: .3rem .9rem; border-radius: 99px;
+      font-size: .78rem; font-weight: 600; letter-spacing: .4px;
+      margin-bottom: .9rem;
+    }
+    .section-title {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700; color: var(--navy); margin-bottom: .6rem;
+    }
+    .section-sub { color: var(--muted); font-size: .95rem; max-width: 520px; }
+
+    /* ── SERVICES ── */
+    .services { background: var(--off); }
+    .services-header { text-align: center; margin-bottom: 3rem; }
+    .services-header .section-sub { margin: 0 auto; }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+    .service-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      transition: box-shadow .25s, transform .25s;
+    }
+    .service-card:hover { box-shadow: var(--shadow); transform: translateY(-4px); }
+    .service-icon {
+      width: 52px; height: 52px;
+      background: rgba(245,166,35,.12);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.1rem;
+      font-size: 1.5rem;
+    }
+    .service-card h3 { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: .5rem; }
+    .service-card p { font-size: .88rem; color: var(--muted); }
+    .free-badge {
+      display: inline-block;
+      background: rgba(29,158,117,.1); color: #0a6a4a;
+      border: 1px solid rgba(29,158,117,.3);
+      padding: .2rem .6rem; border-radius: 6px;
+      font-size: .73rem; font-weight: 700; margin-top: .75rem;
+      letter-spacing: .3px;
+    }
+
+    /* ── HOW TO ── */
+    .howto-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    }
+    .steps { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem; }
+    .step { display: flex; gap: 1.25rem; align-items: flex-start; }
+    .step-num {
+      width: 36px; height: 36px; min-width: 36px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: var(--amber);
+      font-weight: 700; font-size: .9rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-body h4 { font-size: .95rem; font-weight: 700; color: var(--navy); margin-bottom: .3rem; }
+    .step-body p { font-size: .86rem; color: var(--muted); }
+    .howto-cta-box {
+      background: var(--navy);
+      border-radius: 20px; padding: 2.5rem;
+      color: var(--white);
+      display: flex; flex-direction: column; gap: 1.25rem;
+    }
+    .howto-cta-box h3 { font-size: 1.3rem; font-weight: 700; }
+    .howto-cta-box p { font-size: .9rem; color: rgba(255,255,255,.7); }
+    .btn-amber {
+      background: var(--amber); color: var(--navy);
+      padding: .8rem 1.5rem; border-radius: var(--radius);
+      font-weight: 700; font-size: .95rem;
+      display: inline-flex; align-items: center; gap: 8px;
+      width: fit-content; transition: background .2s;
+    }
+    .btn-amber:hover { background: var(--amber2); }
+
+    /* ── WHY US ── */
+    .whyus { background: var(--off); }
+    .whyus-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem; margin-top: 2.5rem;
+    }
+    .why-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 1.5rem;
+      border-top: 3px solid var(--amber);
+    }
+    .why-card .icon { font-size: 1.6rem; margin-bottom: .75rem; }
+    .why-card h4 { font-size: .95rem; font-weight: 700; color: var(--navy); margin-bottom: .4rem; }
+    .why-card p { font-size: .84rem; color: var(--muted); }
+
+    /* ── FAQ ── */
+    .faq-list { max-width: 720px; margin: 2.5rem auto 0; display: flex; flex-direction: column; gap: 1rem; }
+    details {
+      background: var(--off);
+      border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+    }
+    summary {
+      padding: 1.1rem 1.4rem; cursor: pointer;
+      font-weight: 600; font-size: .95rem; color: var(--navy);
+      list-style: none; display: flex; justify-content: space-between; align-items: center;
+    }
+    summary::after { content: '+'; font-size: 1.2rem; color: var(--amber); font-weight: 700; }
+    details[open] summary::after { content: '−'; }
+    details p { padding: 0 1.4rem 1.2rem; font-size: .9rem; color: var(--muted); }
+
+    /* ── CONTACT ── */
+    .contact { background: var(--navy); }
+    .contact .section-tag { background: rgba(245,166,35,.2); color: var(--amber2); border-color: rgba(245,166,35,.4); }
+    .contact .section-title { color: var(--white); }
+    .contact .section-sub { color: rgba(255,255,255,.6); }
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 2.5rem;
+    }
+    .contact-channels { display: flex; flex-direction: column; gap: 1.25rem; }
+    .contact-item {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1.1rem 1.4rem;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 12px;
+      color: var(--white); font-weight: 500; font-size: .95rem;
+      transition: background .2s;
+    }
+    .contact-item:hover { background: rgba(255,255,255,.1); }
+    .ci-icon {
+      width: 40px; height: 40px; min-width: 40px;
+      background: rgba(245,166,35,.15);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+    }
+    .ci-label { font-size: .75rem; color: rgba(255,255,255,.5); font-weight: 400; }
+    .quick-form { display: flex; flex-direction: column; gap: 1rem; }
+    .quick-form input, .quick-form textarea, .quick-form select {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 10px; padding: .75rem 1rem;
+      color: var(--white); font-family: var(--font); font-size: .9rem;
+      outline: none; transition: border-color .2s;
+    }
+    .quick-form input::placeholder, .quick-form textarea::placeholder { color: rgba(255,255,255,.35); }
+    .quick-form input:focus, .quick-form textarea:focus, .quick-form select:focus { border-color: var(--amber); }
+    .quick-form select option { background: var(--navy2); color: var(--white); }
+    .quick-form textarea { min-height: 100px; resize: vertical; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+    .btn-submit {
+      background: var(--amber); color: var(--navy);
+      padding: .8rem; border-radius: var(--radius);
+      font-weight: 700; font-size: .95rem; border: none;
+      cursor: pointer; font-family: var(--font);
+      transition: background .2s; width: 100%;
+    }
+    .btn-submit:hover { background: var(--amber2); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #070f1e;
+      padding: 2rem 5vw;
+      display: flex; flex-wrap: wrap; gap: 1rem;
+      justify-content: space-between; align-items: center;
+    }
+    footer p { color: rgba(255,255,255,.4); font-size: .82rem; }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { color: rgba(255,255,255,.4); font-size: .82rem; transition: color .2s; }
+    .footer-links a:hover { color: var(--amber); }
+
+    /* ── FLOATING CTA ── */
+    .fab {
+      position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 200;
+      display: flex; flex-direction: column; gap: .6rem; align-items: flex-end;
+    }
+    .fab-btn {
+      display: flex; align-items: center; gap: .6rem;
+      padding: .7rem 1.2rem; border-radius: 99px;
+      font-weight: 700; font-size: .85rem; color: var(--white);
+      transition: transform .2s;
+      box-shadow: 0 4px 20px rgba(0,0,0,.3);
+    }
+    .fab-btn:hover { transform: scale(1.04); }
+    .fab-line { background: #06c755; }
+    .fab-call { background: var(--navy); border: 1.5px solid var(--amber); color: var(--amber); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 820px) {
+      .hero { grid-template-columns: 1fr; padding: 56px 5vw 64px; }
+      .hero-card { display: none; }
+      .stats-bar { grid-template-columns: repeat(2, 1fr); }
+      .howto-grid, .contact-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+
+    @media (max-width: 480px) {
+      .stats-bar { grid-template-columns: repeat(2, 1fr); padding: 1rem 5vw; }
+      .stat-num { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav aria-label="เมนูหลัก">
+    <a href="/" class="nav-brand">D <span>On</span> Groups</a>
+    <ul class="nav-links" role="list">
+      <li><a href="/">หน้าแรก</a></li>
+      <li><a href="/services.html">บริการของเรา</a></li>
+      <li><a href="/warranty.html">ตรวจสอบ Warranty</a></li>
+      <li><a href="/ups-info.html">ข้อมูล UPS</a></li>
+      <li><a href="/faq.html">FAQ</a></li>
+      <li><a href="/submit.html" class="nav-cta">แจ้งบริการ</a></li>
+    </ul>
+    <div class="hamburger" aria-label="เปิดเมนู" role="button" tabindex="0">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <header class="hero">
+    <div>
+      <p class="hero-badge">ช่างมืออาชีพเฉพาะทาง UPS</p>
+      <h1>บริการ<em>เปลี่ยนแบตเตอรี่</em><br/>และ PM เครื่อง UPS<br/>ทุกรุ่น ทุกยี่ห้อ</h1>
+      <p>ให้บริการตามบ้านและสำนักงาน โดยทีมช่างเฉพาะทาง พร้อมให้คำปรึกษาตลอด 24 ชั่วโมง ฟรีตรวจสอบเบื้องต้น</p>
+      <div class="hero-btns">
+        <a href="/submit.html" class="btn-primary">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          แจ้งบริการเลย
+        </a>
+        <a href="tel:0915192945" class="btn-outline">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8 19.79 19.79 0 01.54 2.18 2 2 0 012.54 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.29 6.29l.88-.88a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          โทร 091-519-2945
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-card" aria-hidden="true">
+      <p class="hero-card-title">สิ่งที่รวมอยู่ในบริการ</p>
+      <ul class="checklist">
+        <li>
+          <span class="check-icon"><svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          เปลี่ยนแบตเตอรี่ UPS ทุกรุ่น ทุกยี่ห้อ
+        </li>
+        <li>
+          <span class="check-icon"><svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          ฟรี ตรวจสอบประสิทธิภาพตัวเครื่อง
+        </li>
+        <li>
+          <span class="check-icon"><svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          ฟรี ทำความสะอาด กำจัดฝุ่น
+        </li>
+        <li>
+          <span class="check-icon"><svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          สรุปผลการทำงาน UPS หลังให้บริการ
+        </li>
+        <li>
+          <span class="check-icon"><svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          แจ้งเตือนรอบเปลี่ยนแบตเตอรี่ครั้งถัดไป
+        </li>
+        <li>
+          <span class="check-icon"><svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          ให้คำแนะนำการใช้งานถูกวิธี
+        </li>
+      </ul>
+      <hr class="hero-divider" />
+      <div class="hero-contact">
+        <a href="tel:0915192945">📞 091-519-2945</a>
+        <a href="mailto:admin@dongroups.com">✉️ admin@dongroups.com</a>
+        <a href="https://page.line.me/624izvff" target="_blank" rel="noopener">💬 LINE: @dongroups</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── STATS ── -->
+  <div class="stats-bar" role="region" aria-label="สถิติบริการ">
+    <div class="stat-item">
+      <div class="stat-num">500+</div>
+      <div class="stat-label">งานที่ให้บริการแล้ว</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">ทุกยี่ห้อ</div>
+      <div class="stat-label">APC · Eaton · Schneider · และอื่นๆ</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">24 ชม.</div>
+      <div class="stat-label">ให้คำปรึกษาตลอดเวลา</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">ฟรี</div>
+      <div class="stat-label">ตรวจสอบเบื้องต้น</div>
+    </div>
+  </div>
+
+  <!-- ── SERVICES ── -->
+  <section class="services" id="services" aria-labelledby="services-title">
+    <div class="services-header">
+      <p class="section-tag">บริการของเรา</p>
+      <h2 class="section-title" id="services-title">ครบทุกความต้องการเรื่อง UPS</h2>
+      <p class="section-sub">ดูแลเครื่องสำรองไฟอย่างครบวงจร โดยช่างมืออาชีพที่มีประสบการณ์ตรง</p>
+    </div>
+    <div class="cards-grid">
+      <article class="service-card">
+        <div class="service-icon">🔋</div>
+        <h3>เปลี่ยนแบตเตอรี่ UPS</h3>
+        <p>เปลี่ยนแบตเตอรี่ทุกรุ่น ทุกยี่ห้อ ทั้งที่บ้านและสำนักงาน พร้อมรับประกันหลังเปลี่ยน</p>
+      </article>
+      <article class="service-card">
+        <div class="service-icon">🛠️</div>
+        <h3>PM ตรวจสอบเครื่อง</h3>
+        <p>ตรวจสอบประสิทธิภาพเครื่อง UPS อย่างละเอียด พร้อมรายงานผลให้ทุกครั้ง</p>
+        <span class="free-badge">ฟรี</span>
+      </article>
+      <article class="service-card">
+        <div class="service-icon">🌀</div>
+        <h3>ทำความสะอาดเครื่อง</h3>
+        <p>กำจัดฝุ่นสะสมภายในเครื่อง ลดความร้อน ยืดอายุการใช้งาน</p>
+        <span class="free-badge">ฟรี</span>
+      </article>
+      <article class="service-card">
+        <div class="service-icon">🔔</div>
+        <h3>แจ้งเตือนรอบเปลี่ยนแบต</h3>
+        <p>ระบบแจ้งเตือนอัตโนมัติเมื่อใกล้ถึงกำหนดเปลี่ยนแบตเตอรี่ ไม่พลาดทุกรอบ</p>
+      </article>
+      <article class="service-card">
+        <div class="service-icon">💬</div>
+        <h3>ให้คำปรึกษา 24 ชม.</h3>
+        <p>ปรึกษาทีมช่างเรื่องอาการ UPS ได้ตลอดเวลา ไม่มีค่าใช้จ่าย</p>
+        <span class="free-badge">ฟรี</span>
+      </article>
+      <article class="service-card">
+        <div class="service-icon">📍</div>
+        <h3>บริการถึงที่</h3>
+        <p>ช่างเดินทางถึงหน้างาน สะดวก ไม่ต้องขนเครื่องไปเอง</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ── HOW TO ── -->
+  <section id="howto" aria-labelledby="howto-title">
+    <div class="howto-grid">
+      <div>
+        <p class="section-tag">วิธีใช้บริการ</p>
+        <h2 class="section-title" id="howto-title">แค่ 4 ขั้นตอน ช่างถึงบ้านคุณ</h2>
+        <p class="section-sub">ง่าย รวดเร็ว ไม่ยุ่งยาก</p>
+        <ol class="steps">
+          <li class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <h4>แจ้งบริการออนไลน์</h4>
+              <p>กรอกฟอร์มสั้นๆ หรือโทรหาเราโดยตรง พร้อมแนบรูปเครื่อง UPS</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <h4>ปักหมุดสถานที่</h4>
+              <p>ระบุตำแหน่งผ่าน Google Maps เพื่อให้ช่างเดินทางได้ถูกต้อง</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <h4>ทีมงานติดต่อกลับ</h4>
+              <p>เราจะโทรยืนยันนัดหมายและแจ้งราคาโดยประมาณก่อนเข้าให้บริการ</p>
+            </div>
+          </li>
+          <li class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <h4>ช่างเข้าให้บริการ</h4>
+              <p>ช่างมาตรงเวลา ทำงานเสร็จ พร้อมส่งรายงานสรุปให้คุณ</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+      <div class="howto-cta-box">
+        <h3>ไม่แน่ใจเรื่องเครื่อง UPS?</h3>
+        <p>ติดต่อทีมช่างเพื่อปรึกษาตรวจเช็กอาการเบื้องต้น <strong style="color:var(--amber)">ฟรี ไม่มีค่าใช้จ่าย</strong></p>
+        <a href="/submit.html" class="btn-amber">
+          📋 แจ้งบริการออนไลน์
+        </a>
+        <a href="tel:0915192945" class="btn-amber" style="background:rgba(255,255,255,.1); color:#fff; border:1.5px solid rgba(255,255,255,.2);">
+          📞 โทรหาเราเลย 091-519-2945
+        </a>
+        <a href="https://page.line.me/624izvff" target="_blank" rel="noopener" class="btn-amber" style="background:#06c755; color:#fff;">
+          💬 LINE: @dongroups
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── WHY US ── -->
+  <section class="whyus" aria-labelledby="whyus-title">
+    <p class="section-tag">ทำไมต้องเลือกเรา</p>
+    <h2 class="section-title" id="whyus-title">เหตุผลที่ลูกค้าไว้วางใจ</h2>
+    <div class="whyus-grid">
+      <div class="why-card">
+        <div class="icon">⚡</div>
+        <h4>ช่างเฉพาะทาง UPS</h4>
+        <p>ทีมงานผ่านการอบรมและมีประสบการณ์ด้าน UPS โดยตรง</p>
+      </div>
+      <div class="why-card">
+        <div class="icon">🔒</div>
+        <h4>รับประกันหลังบริการ</h4>
+        <p>มั่นใจในงานของเรา มีระยะประกันทุกการเปลี่ยนแบตเตอรี่</p>
+      </div>
+      <div class="why-card">
+        <div class="icon">📊</div>
+        <h4>รายงานผลโดยละเอียด</h4>
+        <p>ได้รับสรุปผลการทำงานของ UPS ทุกครั้งหลังให้บริการ</p>
+      </div>
+      <div class="why-card">
+        <div class="icon">🗓️</div>
+        <h4>แจ้งเตือนอัตโนมัติ</h4>
+        <p>ระบบแจ้งเตือนรอบเปลี่ยนแบต ไม่ต้องจำเองให้ยุ่งยาก</p>
+      </div>
+      <div class="why-card">
+        <div class="icon">🏠</div>
+        <h4>บริการถึงที่</h4>
+        <p>ไม่ต้องขนเครื่องไปไหน ช่างมาหาคุณ สะดวกสบาย</p>
+      </div>
+      <div class="why-card">
+        <div class="icon">✅</div>
+        <h4>ทุกรุ่น ทุกยี่ห้อ</h4>
+        <p>APC, Eaton, Schneider, CyberPower และทุกยี่ห้ออื่นๆ</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FAQ ── -->
+  <section id="faq" aria-labelledby="faq-title">
+    <div style="text-align:center; margin-bottom: 0;">
+      <p class="section-tag">คำถามที่พบบ่อย</p>
+      <h2 class="section-title" id="faq-title">FAQ</h2>
+    </div>
+    <div class="faq-list">
+      <details>
+        <summary>แบตเตอรี่ UPS ควรเปลี่ยนทุกกี่ปี?</summary>
+        <p>โดยทั่วไปแบตเตอรี่ UPS ควรเปลี่ยนทุก 2–3 ปี ขึ้นอยู่กับยี่ห้อ รุ่น และสภาพการใช้งาน หากใช้งานในพื้นที่อุณหภูมิสูงอาจเสื่อมเร็วกว่านั้น</p>
+      </details>
+      <details>
+        <summary>อาการแบบไหนที่บ่งบอกว่าต้องเปลี่ยนแบตเตอรี่?</summary>
+        <p>สัญญาณที่พบบ่อยได้แก่: ไฟเตือนแบตเตอรี่ติด, เวลาสำรองไฟสั้นลงผิดปกติ, เสียงบี๊บถี่ขึ้น, หรือเครื่องปิดเองทันทีเมื่อไฟดับ</p>
+      </details>
+      <details>
+        <summary>สามารถตรวจสอบ Warranty ได้อย่างไร?</summary>
+        <p>เข้าไปที่หน้า <a href="/warranty.html" style="color:var(--amber); font-weight:600;">ตรวจสอบ Warranty</a> แล้วกรอกข้อมูลเครื่องของคุณ ระบบจะแสดงสถานะประกันทันที</p>
+      </details>
+      <details>
+        <summary>ใช้บริการได้ทั่วประเทศไหม?</summary>
+        <p>ปัจจุบันให้บริการในเขตกรุงเทพฯ และปริมณฑลเป็นหลัก สำหรับพื้นที่อื่นสามารถติดต่อสอบถามได้โดยตรง</p>
+      </details>
+      <details>
+        <summary>แบตเตอรี่ที่เปลี่ยนมีรับประกันไหม?</summary>
+        <p>มีรับประกันทุกการเปลี่ยนแบตเตอรี่ ระยะเวลาประกันขึ้นอยู่กับรุ่นและยี่ห้อของแบตเตอรี่ที่เลือก ทีมงานจะแจ้งรายละเอียดก่อนให้บริการ</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <section class="contact" id="contact" aria-labelledby="contact-title">
+    <p class="section-tag">ติดต่อเรา</p>
+    <h2 class="section-title" id="contact-title">พร้อมช่วยเหลือคุณตลอด 24 ชั่วโมง</h2>
+    <p class="section-sub">ติดต่อผ่านช่องทางที่สะดวก หรือส่งข้อความสั้นๆ มาได้เลย</p>
+    <div class="contact-grid">
+      <div class="contact-channels">
+        <a href="tel:0915192945" class="contact-item">
+          <div class="ci-icon">📞</div>
+          <div>
+            <div class="ci-label">โทรศัพท์</div>
+            091-519-2945
+          </div>
+        </a>
+        <a href="mailto:admin@dongroups.com" class="contact-item">
+          <div class="ci-icon">✉️</div>
+          <div>
+            <div class="ci-label">อีเมล</div>
+            admin@dongroups.com
+          </div>
+        </a>
+        <a href="https://page.line.me/624izvff" target="_blank" rel="noopener" class="contact-item">
+          <div class="ci-icon">💬</div>
+          <div>
+            <div class="ci-label">LINE Official</div>
+            @dongroups
+          </div>
+        </a>
+      </div>
+      <form class="quick-form" onsubmit="handleSubmit(event)" aria-label="ฟอร์มติดต่อ">
+        <div class="form-row">
+          <input type="text" name="name" placeholder="ชื่อ-นามสกุล" required />
+          <input type="tel" name="phone" placeholder="เบอร์โทรศัพท์" required />
+        </div>
+        <select name="service" required>
+          <option value="" disabled selected>เลือกบริการที่ต้องการ</option>
+          <option value="battery">เปลี่ยนแบตเตอรี่ UPS</option>
+          <option value="pm">PM ตรวจสอบเครื่อง</option>
+          <option value="consult">ปรึกษาเรื่อง UPS</option>
+          <option value="other">อื่นๆ</option>
+        </select>
+        <textarea name="detail" placeholder="รายละเอียดเพิ่มเติม (ยี่ห้อ รุ่น อาการ...)"></textarea>
+        <button type="submit" class="btn-submit">📤 ส่งข้อความ</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <p>© 2025 D On Groups · บริการเปลี่ยนแบตเตอรี่ UPS และ PM ทุกรุ่น ทุกยี่ห้อ</p>
+    <nav class="footer-links" aria-label="ลิงก์ท้ายหน้า">
+      <a href="/services.html">บริการ</a>
+      <a href="/warranty.html">Warranty</a>
+      <a href="/faq.html">FAQ</a>
+      <a href="/submit.html">แจ้งบริการ</a>
+    </nav>
+  </footer>
+
+  <!-- ── FLOATING ACTION BUTTONS ── -->
+  <div class="fab" role="complementary" aria-label="ช่องทางติดต่อด่วน">
+    <a href="https://page.line.me/624izvff" target="_blank" rel="noopener" class="fab-btn fab-line">
+      💬 LINE
+    </a>
+    <a href="tel:0915192945" class="fab-btn fab-call">
+      📞 โทร
+    </a>
+  </div>
+
+  <script>
+    function handleSubmit(e) {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const data = Object.fromEntries(fd.entries());
+      // ส่งไปยัง Google Apps Script (ใส่ URL จาก deployment ของพี่ที่นี่)
+      const SHEET_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL';
+      alert('ขอบคุณครับ! เราจะติดต่อกลับภายใน 24 ชม. 📞');
+      e.target.reset();
+    }
+  </script>
+</body>
+</html>

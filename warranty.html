@@ -179,7 +179,10 @@
   };
   // =========================================
 
-  
+  function parseThaiDate(str) {
+  const d = new Date(str);
+  return isNaN(d) ? null : d;
+}
   function formatDate(d) {
     if(!d||isNaN(d)) return '-';
     return d.toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'});

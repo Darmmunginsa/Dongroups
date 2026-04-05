@@ -180,6 +180,21 @@
   // =========================================
 
   function parseThaiDate(str) {
+  if (!str) return null;
+
+  // ถ้าเป็น Date อยู่แล้ว
+  if (Object.prototype.toString.call(str) === '[object Date]') {
+    return str;
+  }
+
+  // รองรับ format 10/26/2025 (MM/DD/YYYY)
+  const parts = str.toString().split('/');
+  if (parts.length === 3) {
+    let [m, d, y] = parts.map(Number);
+    if (y > 2400) y -= 543;
+    return new Date(y, m - 1, d);
+  }
+
   const d = new Date(str);
   return isNaN(d) ? null : d;
   }

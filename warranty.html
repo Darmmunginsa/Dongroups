@@ -182,29 +182,22 @@
   function parseThaiDate(value) {
   if (!value) return null;
 
-  // ถ้าเป็น Date object
-  if (Object.prototype.toString.call(value) === '[object Date]') {
+  // ✅ ถ้าเป็น Date object จาก Google Sheet
+  if (value instanceof Date) {
     return value;
   }
 
-  // แปลง string
+  // ✅ ถ้าเป็น string
   const str = value.toString().trim();
 
-  // รองรับทั้ง dd/mm/yyyy และ mm/dd/yyyy
   const parts = str.split('/');
   if (parts.length === 3) {
-    let a = Number(parts[0]);
-    let b = Number(parts[1]);
-    let y = Number(parts[2]);
+    let [m, d, y] = parts.map(Number);
 
+    // รองรับ พ.ศ.
     if (y > 2400) y -= 543;
 
-    // ถ้า a > 12 = dd/mm/yyyy
-    if (a > 12) {
-      return new Date(y, b - 1, a);
-    } else {
-      return new Date(y, a - 1, b);
-    }
+    return new Date(y, m - 1, d);
   }
 
   const d = new Date(str);
@@ -269,8 +262,8 @@
 
     const customer = row.c[COL.customer]?.v || '-';
     const brand    = COL.brand!=null ? (row.c[COL.brand]?.v || '-') : null;
-    const instDate = parseThaiDate(row.c[COL.installed]?.v ?? row.c[COL.installed]?.f);
-    const expDate = parseThaiDate(row.c[COL.expiry]?.v ?? row.c[COL.expiry]?.f);
+    const instDate = parseThaiDate(row.c[COL.installed]?.v || row.c[COL.installed]?.f);
+    const expDate  = parseThaiDate(row.c[COL.expiry]?.v || row.c[COL.expiry]?.f);
 
     const today = new Date(); today.setHours(0,0,0,0);
     const daysLeft = expDate ? Math.round((expDate-today)/(1000*60*60*24)) : null;

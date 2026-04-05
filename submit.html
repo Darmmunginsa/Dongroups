@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>แจ้งบริการ | D On Groups — เปลี่ยนแบตเตอรี่ UPS</title>
+  <meta name="description" content="แจ้งบริการเปลี่ยนแบตเตอรี่ UPS และ PM ออนไลน์ ง่าย รวดเร็ว พร้อมปักหมุดสถานที่บนแผนที่"/>
+  <meta name="robots" content="index,follow"/>
+  <link rel="canonical" href="https://www.dongroups.com/submit.html"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/main.css"/>
+  <style>
+    /* ===== CONFIG ===== */
+    /* ใส่ค่าตรงนี้ก่อน deploy */
+    /* GOOGLE_MAPS_API_KEY  → ใส่ใน script tag ด้านล่าง */
+    /* APPS_SCRIPT_URL      → ใส่ใน JS ด้านล่าง          */
+
+    .submit-layout{display:grid;grid-template-columns:1fr 420px;gap:2.5rem;align-items:start}
+    .form-card{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:2.5rem}
+    .form-card h2{font-size:1.2rem;font-weight:700;color:var(--navy);margin-bottom:1.75rem;
+      padding-bottom:.75rem;border-bottom:2px solid var(--amber)}
+    .field{margin-bottom:1.25rem}
+    .field label{display:block;font-size:.85rem;font-weight:600;color:var(--navy);margin-bottom:.45rem}
+    .field label .req{color:var(--danger);margin-left:2px}
+    .field input,.field textarea,.field select{
+      width:100%;padding:.8rem 1rem;border:1.5px solid var(--border);border-radius:10px;
+      font-family:var(--font);font-size:.93rem;color:var(--text);outline:none;transition:border-color .2s;
+      background:var(--white)}
+    .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--amber)}
+    .field input::placeholder,.field textarea::placeholder{color:#aab4c8}
+    .field select option{color:var(--text)}
+    .field textarea{min-height:90px;resize:vertical}
+    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    .field-hint{font-size:.76rem;color:var(--muted);margin-top:.35rem}
+
+    /* Map */
+    .map-field{margin-bottom:1.25rem}
+    .map-field label{display:block;font-size:.85rem;font-weight:600;color:var(--navy);margin-bottom:.45rem}
+    #map{width:100%;height:280px;border-radius:12px;border:1.5px solid var(--border);
+      background:#e8edf3;overflow:hidden}
+    .map-actions{display:flex;gap:.6rem;margin-top:.6rem;flex-wrap:wrap}
+    .map-btn{padding:.5rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;
+      cursor:pointer;border:1.5px solid var(--border);background:var(--white);
+      font-family:var(--font);color:var(--navy);transition:border-color .2s,background .2s}
+    .map-btn:hover{border-color:var(--amber);background:rgba(245,166,35,.06)}
+    .map-btn.active-btn{background:var(--navy);color:var(--white);border-color:var(--navy)}
+    #locationDisplay{margin-top:.5rem;font-size:.78rem;color:var(--muted);min-height:18px}
+    #locationDisplay.found{color:var(--success);font-weight:600}
+
+    /* Checklist */
+    .checklist-field{margin-bottom:1.25rem}
+    .checklist-field label{display:block;font-size:.85rem;font-weight:600;color:var(--navy);margin-bottom:.6rem}
+    .check-options{display:flex;flex-wrap:wrap;gap:.5rem}
+    .check-opt{display:none}
+    .check-opt+label{
+      padding:.45rem .9rem;border-radius:8px;border:1.5px solid var(--border);
+      font-size:.83rem;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s}
+    .check-opt:checked+label{background:var(--navy);color:var(--white);border-color:var(--navy)}
+
+    /* Submit btn */
+    .btn-submit{width:100%;background:var(--amber);color:var(--navy);border:none;
+      padding:1rem;border-radius:var(--radius);font-weight:700;font-size:1rem;
+      cursor:pointer;font-family:var(--font);transition:background .2s;margin-top:.5rem}
+    .btn-submit:hover{background:var(--amber2)}
+    .btn-submit:disabled{opacity:.6;cursor:not-allowed}
+
+    /* Sidebar info */
+    .sidebar{display:flex;flex-direction:column;gap:1.25rem}
+    .info-block{background:var(--off);border:1px solid var(--border);border-radius:16px;padding:1.5rem}
+    .info-block h3{font-size:.95rem;font-weight:700;color:var(--navy);margin-bottom:1rem;
+      display:flex;align-items:center;gap:.5rem}
+    .info-block ul{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+    .info-block ul li{font-size:.87rem;color:var(--muted);display:flex;align-items:flex-start;gap:.5rem}
+    .info-block ul li::before{content:'›';color:var(--amber);font-weight:700}
+    .contact-links{display:flex;flex-direction:column;gap:.75rem}
+    .contact-link{display:flex;align-items:center;gap:.75rem;padding:.85rem 1rem;
+      background:var(--white);border:1px solid var(--border);border-radius:10px;
+      font-weight:600;font-size:.9rem;color:var(--navy);transition:border-color .2s}
+    .contact-link:hover{border-color:var(--amber)}
+    .cl-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;
+      justify-content:center;font-size:1rem;flex-shrink:0}
+    .cl-phone .cl-icon{background:rgba(11,30,61,.1)}
+    .cl-line .cl-icon{background:rgba(6,199,85,.15)}
+    .cl-email .cl-icon{background:rgba(245,166,35,.15)}
+
+    /* Success state */
+    #successMsg{display:none;background:rgba(29,158,117,.08);border:1px solid rgba(29,158,117,.3);
+      border-radius:14px;padding:2rem;text-align:center;margin-top:1.5rem}
+    #successMsg .big{font-size:2.5rem;display:block;margin-bottom:.75rem}
+    #successMsg h3{font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:.5rem}
+    #successMsg p{font-size:.88rem;color:var(--muted)}
+
+    /* Loading overlay on submit */
+    .spinner-inline{display:inline-block;width:18px;height:18px;border:2.5px solid rgba(11,30,61,.2);
+      border-top-color:var(--navy);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    @media(max-width:900px){
+      .submit-layout{grid-template-columns:1fr}
+      .sidebar{order:-1}
+    }
+    @media(max-width:480px){.field-row{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+<nav aria-label="เมนูหลัก">
+  <a href="index.html" class="nav-brand">D <span>On</span> Groups</a>
+  <ul class="nav-links">
+    <li><a href="index.html">หน้าแรก</a></li>
+    <li><a href="services.html">บริการของเรา</a></li>
+    <li><a href="warranty.html">ตรวจสอบ Warranty</a></li>
+    <li><a href="ups-info.html">ข้อมูล UPS</a></li>
+    <li><a href="faq.html">FAQ</a></li>
+    <li><a href="submit.html" class="nav-cta active">แจ้งบริการ</a></li>
+  </ul>
+  <div class="hamburger" role="button" aria-label="เปิดเมนู"><span></span><span></span><span></span></div>
+</nav>
+<nav class="mobile-menu">
+  <a href="index.html">หน้าแรก</a><a href="services.html">บริการของเรา</a>
+  <a href="warranty.html">ตรวจสอบ Warranty</a><a href="ups-info.html">ข้อมูล UPS</a>
+  <a href="faq.html">FAQ</a><a href="submit.html">แจ้งบริการ</a>
+</nav>
+
+<div class="page-hero">
+  <nav class="breadcrumb" aria-label="breadcrumb">
+    <a href="index.html">หน้าแรก</a> › <span>แจ้งบริการ</span>
+  </nav>
+  <h1><em>แจ้งบริการ</em>ออนไลน์</h1>
+  <p>กรอกฟอร์มสั้นๆ ทีมงานจะติดต่อกลับภายใน 24 ชั่วโมง</p>
+</div>
+
+<section>
+  <div class="submit-layout">
+
+    <!-- FORM -->
+    <div>
+      <div class="form-card">
+        <h2>📋 ข้อมูลการแจ้งบริการ</h2>
+        <form id="serviceForm" novalidate>
+
+          <!-- บริการ -->
+          <div class="checklist-field">
+            <label>บริการที่ต้องการ <span class="req">*</span></label>
+            <div class="check-options">
+              <input type="checkbox" id="s1" name="service" value="เปลี่ยนแบตเตอรี่ UPS" class="check-opt"/>
+              <label for="s1">🔋 เปลี่ยนแบตเตอรี่ UPS</label>
+              <input type="checkbox" id="s2" name="service" value="PM ตรวจสอบเครื่อง" class="check-opt"/>
+              <label for="s2">🛠️ PM ตรวจสอบเครื่อง</label>
+              <input type="checkbox" id="s3" name="service" value="ปรึกษา/ตรวจเช็กเบื้องต้น" class="check-opt"/>
+              <label for="s3">💬 ปรึกษา / ตรวจเช็กเบื้องต้น</label>
+              <input type="checkbox" id="s4" name="service" value="อื่นๆ" class="check-opt"/>
+              <label for="s4">➕ อื่นๆ</label>
+            </div>
+          </div>
+
+          <!-- ชื่อ เบอร์ -->
+          <div class="field-row">
+            <div class="field">
+              <label>ชื่อ-นามสกุล <span class="req">*</span></label>
+              <input type="text" name="name" id="name" placeholder="ชื่อผู้แจ้งบริการ" required autocomplete="name"/>
+            </div>
+            <div class="field">
+              <label>เบอร์โทรศัพท์ <span class="req">*</span></label>
+              <input type="tel" name="phone" id="phone" placeholder="0812345678" required autocomplete="tel"/>
+            </div>
+          </div>
+
+          <!-- ยี่ห้อ รุ่น -->
+          <div class="field-row">
+            <div class="field">
+              <label>ยี่ห้อ UPS</label>
+              <input type="text" name="brand" placeholder="เช่น APC, Eaton, Schneider"/>
+            </div>
+            <div class="field">
+              <label>รุ่น / Model</label>
+              <input type="text" name="model" placeholder="เช่น Back-UPS 650"/>
+            </div>
+          </div>
+
+          <!-- อาการ -->
+          <div class="field">
+            <label>อาการหรือรายละเอียดเพิ่มเติม</label>
+            <textarea name="detail" placeholder="เช่น เสียงบี๊บดัง, ไฟ LED แจ้งเตือน, เวลาสำรองสั้นลง..."></textarea>
+          </div>
+
+          <!-- ที่อยู่ -->
+          <div class="field">
+            <label>ที่อยู่หน้างาน <span class="req">*</span></label>
+            <textarea name="address" id="address" rows="2" placeholder="บ้านเลขที่ ถนน แขวง/ตำบล เขต/อำเภอ จังหวัด" required></textarea>
+          </div>
+
+          <!-- แผนที่ปักหมุด -->
+          <div class="map-field">
+            <label>📍 ปักหมุดสถานที่บนแผนที่ <span style="font-weight:400;color:var(--muted)">(แนะนำ)</span></label>
+            <div id="map" aria-label="แผนที่ปักหมุดสถานที่"></div>
+            <div class="map-actions">
+              <button type="button" class="map-btn" onclick="useMyLocation()" id="btnGPS">📡 ใช้ตำแหน่งปัจจุบัน</button>
+              <button type="button" class="map-btn" onclick="searchMapAddress()" id="btnSearch">🔍 ค้นหาที่อยู่</button>
+            </div>
+            <div id="locationDisplay">คลิกบนแผนที่ หรือกดปุ่มเพื่อระบุตำแหน่ง</div>
+            <input type="hidden" id="lat" name="lat"/>
+            <input type="hidden" id="lng" name="lng"/>
+            <input type="hidden" id="mapLink" name="mapLink"/>
+          </div>
+
+          <!-- วันที่สะดวก -->
+          <div class="field-row">
+            <div class="field">
+              <label>วันที่สะดวกรับบริการ</label>
+              <input type="date" name="preferDate" id="preferDate"/>
+            </div>
+            <div class="field">
+              <label>ช่วงเวลา</label>
+              <select name="preferTime">
+                <option value="">-- เลือกช่วงเวลา --</option>
+                <option value="เช้า 9:00–12:00">เช้า 09:00–12:00</option>
+                <option value="บ่าย 13:00–17:00">บ่าย 13:00–17:00</option>
+                <option value="สะดวกทุกเวลา">สะดวกทุกเวลา</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- ชื่อผู้ประสานงาน -->
+          <div class="field">
+            <label>ชื่อ-เบอร์ผู้ประสานงานหน้างาน</label>
+            <input type="text" name="coordinator" placeholder="(ถ้าต่างจากผู้แจ้ง) ชื่อ / เบอร์โทร"/>
+            <p class="field-hint">* สำหรับช่างใช้ติดต่อเข้าหน้างาน</p>
+          </div>
+
+          <button type="submit" class="btn-submit" id="btnSubmit">📤 ส่งแจ้งบริการ</button>
+        </form>
+
+        <div id="successMsg" role="alert" aria-live="polite">
+          <span class="big">🎉</span>
+          <h3>ส่งแจ้งบริการสำเร็จแล้วครับ!</h3>
+          <p>ทีมงานจะโทรยืนยันนัดหมายภายใน 24 ชั่วโมง<br/>
+          หรือทักผ่าน <a href="https://page.line.me/624izvff" style="color:var(--amber);font-weight:700">LINE @dongroups</a></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="info-block">
+        <h3>📌 สิ่งที่ต้องเตรียม</h3>
+        <ul>
+          <li>รูปหรือวิดีโอเครื่อง UPS (ถ่ายสติกเกอร์รุ่นให้เห็นด้วย)</li>
+          <li>ตำแหน่งสถานที่ให้ชัดเจน (ปักหมุดได้ในฟอร์ม)</li>
+          <li>ชื่อ-เบอร์ผู้ประสานงานหน้างาน</li>
+        </ul>
+      </div>
+      <div class="info-block">
+        <h3>⚡ บริการครอบคลุม</h3>
+        <ul>
+          <li>เปลี่ยนแบตเตอรี่ทุกรุ่น ทุกยี่ห้อ</li>
+          <li>ฟรี PM ตรวจสอบประสิทธิภาพเครื่อง</li>
+          <li>ฟรี ทำความสะอาดกำจัดฝุ่น</li>
+          <li>สรุปรายงานผลหลังให้บริการ</li>
+          <li>แจ้งเตือนรอบเปลี่ยนแบตครั้งถัดไป</li>
+        </ul>
+      </div>
+      <div class="info-block">
+        <h3>📞 ติดต่อโดยตรง</h3>
+        <div class="contact-links">
+          <a href="tel:0915192945" class="contact-link cl-phone">
+            <span class="cl-icon">📞</span>
+            <div><div style="font-size:.72rem;color:var(--muted);font-weight:400">โทรศัพท์</div>091-519-2945</div>
+          </a>
+          <a href="https://page.line.me/624izvff" target="_blank" rel="noopener" class="contact-link cl-line">
+            <span class="cl-icon">💬</span>
+            <div><div style="font-size:.72rem;color:var(--muted);font-weight:400">LINE Official</div>@dongroups</div>
+          </a>
+          <a href="mailto:admin@dongroups.com" class="contact-link cl-email">
+            <span class="cl-icon">✉️</span>
+            <div><div style="font-size:.72rem;color:var(--muted);font-weight:400">อีเมล</div>admin@dongroups.com</div>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 D On Groups · บริการเปลี่ยนแบตเตอรี่ UPS ทุกรุ่น ทุกยี่ห้อ</p>
+  <nav class="footer-links"><a href="services.html">บริการ</a><a href="warranty.html">Warranty</a><a href="faq.html">FAQ</a><a href="submit.html">แจ้งบริการ</a></nav>
+</footer>
+<div class="fab">
+  <a href="https://page.line.me/624izvff" target="_blank" rel="noopener" class="fab-btn fab-line">💬 LINE</a>
+  <a href="tel:0915192945" class="fab-btn fab-call">📞 โทร</a>
+</div>
+
+<!-- ===== Google Maps API — ใส่ API Key ของพี่ตรงนี้ ===== -->
+<script>
+  const GOOGLE_MAPS_API_KEY = 'AIzaSyCpdPnC-05ikjMo6UNrgH8zBOVFgwuqdXs';
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwe6F-Rfva31oQGTYQz7QdsyKw7SzETs5rO7gSp9olw42uGvHuWmuAZbxPnSW1hrcDTkw/exec';
+
+  // โหลด Google Maps
+  const mapScript = document.createElement('script');
+  mapScript.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places&callback=initMap&language=th`;
+  mapScript.async = true; mapScript.defer = true;
+  document.head.appendChild(mapScript);
+
+  let map, marker, geocoder;
+  const DEFAULT_CENTER = {lat:13.7563, lng:100.5018}; // กรุงเทพฯ
+
+  function initMap() {
+    map = new google.maps.Map(document.getElementById('map'),{
+      center: DEFAULT_CENTER, zoom: 12,
+      mapTypeControl:false, streetViewControl:false,
+      styles:[{featureType:'poi',elementType:'labels',stylers:[{visibility:'off'}]}]
+    });
+    geocoder = new google.maps.Geocoder();
+    map.addListener('click', e => placeMarker(e.latLng));
+  }
+
+  function placeMarker(latLng) {
+    if(marker) marker.setMap(null);
+    marker = new google.maps.Marker({
+      position:latLng, map,
+      animation:google.maps.Animation.DROP,
+      icon:{url:'https://maps.google.com/mapfiles/ms/icons/red-dot.png'}
+    });
+    const lat = latLng.lat().toFixed(6);
+    const lng = latLng.lng().toFixed(6);
+    document.getElementById('lat').value = lat;
+    document.getElementById('lng').value = lng;
+    document.getElementById('mapLink').value = `https://www.google.com/maps?q=${lat},${lng}`;
+    document.getElementById('locationDisplay').textContent = `📍 ตำแหน่ง: ${lat}, ${lng}`;
+    document.getElementById('locationDisplay').className = 'found';
+    // Reverse geocode
+    geocoder.geocode({location:latLng}, (results,status) => {
+      if(status==='OK'&&results[0]){
+        const addr = results[0].formatted_address;
+        document.getElementById('locationDisplay').textContent = `📍 ${addr}`;
+        if(!document.getElementById('address').value)
+          document.getElementById('address').value = addr;
+      }
+    });
+  }
+
+  function useMyLocation() {
+    const btn = document.getElementById('btnGPS');
+    btn.textContent='⏳ กำลังระบุตำแหน่ง...'; btn.disabled=true;
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        const latlng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+        map.setCenter(latlng); map.setZoom(17);
+        placeMarker(latlng);
+        btn.textContent='📡 ใช้ตำแหน่งปัจจุบัน'; btn.disabled=false;
+      },
+      () => { alert('ไม่สามารถรับตำแหน่งได้ กรุณาอนุญาต Location'); btn.textContent='📡 ใช้ตำแหน่งปัจจุบัน'; btn.disabled=false; }
+    );
+  }
+
+  function searchMapAddress() {
+    const q = document.getElementById('address').value.trim();
+    if(!q){ alert('กรุณากรอกที่อยู่ก่อนครับ'); return; }
+    geocoder.geocode({address:q,region:'TH'}, (results,status) => {
+      if(status==='OK'){
+        map.setCenter(results[0].geometry.location);
+        map.setZoom(17);
+        placeMarker(results[0].geometry.location);
+      } else { alert('ไม่พบที่อยู่นี้ กรุณาลองใหม่อีกครั้ง'); }
+    });
+  }
+
+  // ===== Form Submit =====
+  document.getElementById('serviceForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const btn = document.getElementById('btnSubmit');
+
+    // Validate
+    const name  = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const addr  = document.getElementById('address').value.trim();
+    const services = [...document.querySelectorAll('input[name="service"]:checked')].map(el=>el.value);
+    if(!name){ alert('กรุณากรอกชื่อครับ'); return; }
+    if(!phone){ alert('กรุณากรอกเบอร์โทรครับ'); return; }
+    if(!addr){ alert('กรุณากรอกที่อยู่หน้างานครับ'); return; }
+    if(services.length===0){ alert('กรุณาเลือกบริการที่ต้องการอย่างน้อย 1 รายการครับ'); return; }
+
+    btn.disabled=true;
+    btn.innerHTML='<span class="spinner-inline"></span> กำลังส่ง...';
+
+    const fd = new FormData(e.target);
+    const data = {
+      timestamp: new Date().toLocaleString('th-TH',{timeZone:'Asia/Bangkok'}),
+      name:       fd.get('name'),
+      phone:      fd.get('phone'),
+      services:   services.join(', '),
+      brand:      fd.get('brand')||'-',
+      model:      fd.get('model')||'-',
+      detail:     fd.get('detail')||'-',
+      address:    fd.get('address'),
+      lat:        fd.get('lat')||'-',
+      lng:        fd.get('lng')||'-',
+      mapLink:    fd.get('mapLink')||'-',
+      preferDate: fd.get('preferDate')||'-',
+      preferTime: fd.get('preferTime')||'-',
+      coordinator:fd.get('coordinator')||'-',
+      status:     'รอดำเนินการ'
+    };
+
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method:'POST',
+        mode:'no-cors',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(data)
+      });
+      e.target.style.display='none';
+      document.getElementById('successMsg').style.display='block';
+    } catch(err) {
+      alert('เกิดข้อผิดพลาด กรุณาลองใหม่หรือโทร 091-519-2945 ครับ');
+      btn.disabled=false;
+      btn.innerHTML='📤 ส่งแจ้งบริการ';
+    }
+  });
+
+  // Min date = today
+  const d = new Date();
+  document.getElementById('preferDate').min = d.toISOString().split('T')[0];
+</script>
+<script src="js/main.js"></script>
+</body>
+</html>

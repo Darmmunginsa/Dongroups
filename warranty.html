@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>ตรวจสอบ Warranty | D On Groups</title>
+  <meta name="description" content="ตรวจสอบสถานะการรับประกันเครื่อง UPS ด้วย Serial Number — ทราบผลทันทีออนไลน์"/>
+  <meta name="robots" content="index,follow"/>
+  <link rel="canonical" href="https://www.dongroups.com/warranty.html"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/main.css"/>
+  <style>
+    /* ── WARRANTY SHEET CONFIG ── */
+    /* Sheet ID และ GID อยู่ใน script ด้านล่าง */
+
+    .warranty-wrap{max-width:600px;margin:0 auto}
+    .search-box{background:var(--white);border:1px solid var(--border);border-radius:20px;
+      padding:2.5rem;box-shadow:var(--shadow)}
+    .search-box h2{font-size:1.2rem;font-weight:700;color:var(--navy);margin-bottom:.5rem}
+    .search-box p{font-size:.88rem;color:var(--muted);margin-bottom:1.75rem}
+    .input-group{display:flex;gap:.75rem}
+    .input-group input{flex:1;padding:.8rem 1rem;border:1.5px solid var(--border);
+      border-radius:10px;font-family:var(--font);font-size:.95rem;color:var(--text);
+      outline:none;transition:border-color .2s}
+    .input-group input:focus{border-color:var(--amber)}
+    .input-group input::placeholder{color:#aab4c8}
+    .btn-search{background:var(--navy);color:var(--white);border:none;
+      padding:.8rem 1.5rem;border-radius:10px;font-family:var(--font);
+      font-weight:700;font-size:.9rem;cursor:pointer;white-space:nowrap;transition:background .2s}
+    .btn-search:hover{background:var(--navy3)}
+    .hint{font-size:.78rem;color:var(--muted);margin-top:.6rem}
+
+    /* Result card */
+    #result{margin-top:1.5rem;display:none}
+    .result-card{border-radius:16px;padding:2rem;border:1px solid}
+    .result-card.valid{background:rgba(29,158,117,.06);border-color:rgba(29,158,117,.3)}
+    .result-card.expired{background:rgba(220,53,69,.06);border-color:rgba(220,53,69,.3)}
+    .result-card.notfound{background:rgba(90,106,138,.06);border-color:rgba(90,106,138,.2)}
+    .result-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem}
+    .status-icon{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem}
+    .valid .status-icon{background:rgba(29,158,117,.15)}
+    .expired .status-icon{background:rgba(220,53,69,.12)}
+    .notfound .status-icon{background:rgba(90,106,138,.1)}
+    .status-label{font-size:.78rem;font-weight:600;letter-spacing:.4px;margin-bottom:.2rem}
+    .valid .status-label{color:var(--success)}
+    .expired .status-label{color:var(--danger)}
+    .notfound .status-label{color:var(--muted)}
+    .status-title{font-size:1.05rem;font-weight:700;color:var(--navy)}
+    .result-table{width:100%;border-collapse:collapse;font-size:.88rem}
+    .result-table tr{border-bottom:1px solid var(--border)}
+    .result-table tr:last-child{border-bottom:none}
+    .result-table td{padding:.6rem 0}
+    .result-table td:first-child{color:var(--muted);width:140px}
+    .result-table td:last-child{font-weight:600;color:var(--navy)}
+    .days-left{display:inline-block;padding:.2rem .7rem;border-radius:99px;font-size:.78rem;font-weight:700}
+    .days-valid{background:rgba(29,158,117,.12);color:#0a6a4a}
+    .days-expire{background:rgba(220,53,69,.12);color:var(--danger)}
+    .progress-bar{height:8px;background:var(--border);border-radius:99px;margin-top:1rem;overflow:hidden}
+    .progress-fill{height:100%;border-radius:99px;transition:width .6s}
+    .progress-fill.green{background:var(--success)}
+    .progress-fill.red{background:var(--danger)}
+    .progress-fill.orange{background:#f5a623}
+    .progress-label{display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted);margin-top:.35rem}
+
+    .loading{text-align:center;padding:2rem;color:var(--muted);font-size:.9rem;display:none}
+    .spinner{display:inline-block;width:28px;height:28px;border:3px solid var(--border);
+      border-top-color:var(--amber);border-radius:50%;animation:spin .7s linear infinite;margin-bottom:.5rem}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* Info section */
+    .info-section{background:var(--off)}
+    .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem;margin-top:2.5rem}
+    .info-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1.5rem}
+    .info-card .icon{font-size:1.5rem;margin-bottom:.75rem}
+    .info-card h3{font-size:.95rem;font-weight:700;color:var(--navy);margin-bottom:.4rem}
+    .info-card p{font-size:.84rem;color:var(--muted)}
+  </style>
+</head>
+<body>
+
+<nav aria-label="เมนูหลัก">
+  <a href="index.html" class="nav-brand">D <span>On</span> Groups</a>
+  <ul class="nav-links">
+    <li><a href="index.html">หน้าแรก</a></li>
+    <li><a href="services.html">บริการของเรา</a></li>
+    <li><a href="warranty.html" class="active">ตรวจสอบ Warranty</a></li>
+    <li><a href="ups-info.html">ข้อมูล UPS</a></li>
+    <li><a href="faq.html">FAQ</a></li>
+    <li><a href="submit.html" class="nav-cta">แจ้งบริการ</a></li>
+  </ul>
+  <div class="hamburger" role="button" aria-label="เปิดเมนู"><span></span><span></span><span></span></div>
+</nav>
+<nav class="mobile-menu">
+  <a href="index.html">หน้าแรก</a>
+  <a href="services.html">บริการของเรา</a>
+  <a href="warranty.html">ตรวจสอบ Warranty</a>
+  <a href="ups-info.html">ข้อมูล UPS</a>
+  <a href="faq.html">FAQ</a>
+  <a href="submit.html">แจ้งบริการ</a>
+</nav>
+
+<div class="page-hero">
+  <nav class="breadcrumb" aria-label="breadcrumb">
+    <a href="index.html">หน้าแรก</a> › <span>ตรวจสอบ Warranty</span>
+  </nav>
+  <h1>ตรวจสอบ<em>สถานะประกัน</em></h1>
+  <p>กรอก Serial Number ของเครื่อง UPS เพื่อตรวจสอบสถานะการรับประกัน</p>
+</div>
+
+<section style="padding-top:56px;padding-bottom:56px">
+  <div class="warranty-wrap">
+    <div class="search-box">
+      <h2>🔍 ค้นหาด้วย Serial Number</h2>
+      <p>Serial Number อยู่ที่ด้านหลังหรือด้านล่างของเครื่อง UPS มักขึ้นต้นด้วยตัวอักษรผสมตัวเลข เช่น <strong>JS2312345678</strong></p>
+      <div class="input-group">
+        <input type="text" id="serialInput" placeholder="เช่น JS2312345678" autocomplete="off"
+          aria-label="กรอก Serial Number" maxlength="50"/>
+        <button class="btn-search" onclick="searchWarranty()" aria-label="ค้นหา">ค้นหา</button>
+      </div>
+      <p class="hint">* กรอกตัวอักษรและตัวเลขตรงๆ ไม่ต้องเว้นวรรค ไม่คำนึงถึงตัวพิมพ์เล็กใหญ่</p>
+    </div>
+
+    <div class="loading" id="loading" aria-live="polite">
+      <div class="spinner"></div>
+      <div>กำลังตรวจสอบข้อมูล...</div>
+    </div>
+
+    <div id="result" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="info-section" aria-labelledby="info-title">
+  <p class="section-tag">ข้อมูลการรับประกัน</p>
+  <h2 class="section-title" id="info-title">รายละเอียดการรับประกัน</h2>
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="icon">📅</div>
+      <h3>ระยะเวลาประกัน</h3>
+      <p>แบตเตอรี่ที่เปลี่ยนมีประกันตามที่ระบุในใบงาน ขึ้นอยู่กับรุ่นและยี่ห้อที่เลือก</p>
+    </div>
+    <div class="info-card">
+      <div class="icon">🔒</div>
+      <h3>สิ่งที่ครอบคลุม</h3>
+      <p>แบตเตอรี่เสื่อมสภาพผิดปกติ ชำรุดภายใต้การใช้งานปกติ ไม่รวมความเสียหายจากอุบัติเหตุ</p>
+    </div>
+    <div class="info-card">
+      <div class="icon">📞</div>
+      <h3>เคลมประกัน</h3>
+      <p>ติดต่อ 091-519-2945 หรือ LINE @dongroups พร้อมแจ้ง Serial Number และอาการ</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 D On Groups · บริการเปลี่ยนแบตเตอรี่ UPS ทุกรุ่น ทุกยี่ห้อ</p>
+  <nav class="footer-links"><a href="services.html">บริการ</a><a href="warranty.html">Warranty</a><a href="faq.html">FAQ</a><a href="submit.html">แจ้งบริการ</a></nav>
+</footer>
+<div class="fab">
+  <a href="https://page.line.me/624izvff" target="_blank" rel="noopener" class="fab-btn fab-line">💬 LINE</a>
+  <a href="tel:0915192945" class="fab-btn fab-call">📞 โทร</a>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+  // ===== CONFIG — แก้ไขตรงนี้ =====
+  const SHEET_ID = '18r0YdKmEnrVmOxjFNysVWW3Z7w31QkUglL48dx9v_Rc';
+  const SHEET_GID = '514177570';
+  // คอลัมน์ใน Sheet (A=0, B=1, C=2, ...)
+  // ต้องตรงกับ Google Sheet ของพี่
+  // ปรับ index ตาม column จริงของพี่
+  const COL = {
+    serial:    3, // D — Serial Number
+    customer:  1, // B — CustomerName
+    brand:     4, // E — BrandModel
+    installed: 5, // F — StartDate
+    expiry:    6  // G — Expiredate
+  };
+  // =========================================
+
+  function parseThaiDate(str) {
+    if(!str) return null;
+    const parts = str.split('/');
+    if(parts.length===3){
+      let [d,m,y] = parts.map(Number);
+      if(y>2400) y -= 543; // แปลง พ.ศ. → ค.ศ.
+      return new Date(y,m-1,d);
+    }
+    const d = new Date(str);
+    return isNaN(d) ? null : d;
+  }
+
+  function formatDate(d) {
+    if(!d||isNaN(d)) return '-';
+    return d.toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'});
+  }
+
+  async function searchWarranty() {
+    const raw = document.getElementById('serialInput').value.trim();
+    if(!raw){ alert('กรุณากรอก Serial Number ก่อนครับ'); return; }
+    const serial = raw.toUpperCase();
+
+    document.getElementById('result').style.display='none';
+    document.getElementById('loading').style.display='block';
+
+    try {
+      const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${SHEET_GID}`;
+      const res = await fetch(url);
+      const text = await res.text();
+      const json = JSON.parse(text.replace(/^[^(]+\(/, '').replace(/\);?\s*$/, ''));
+      const rows = json.table.rows;
+
+      const found = rows.find(r => {
+        const val = r.c[COL.serial]?.v;
+        return val && String(val).toUpperCase().trim() === serial;
+      });
+
+      document.getElementById('loading').style.display='none';
+      showResult(found, serial);
+    } catch(e) {
+      document.getElementById('loading').style.display='none';
+      showError();
+    }
+  }
+
+  function showResult(row, serial) {
+    const el = document.getElementById('result');
+    el.style.display='block';
+
+    if(!row) {
+      el.innerHTML = `
+        <div class="result-card notfound">
+          <div class="result-header">
+            <div class="status-icon">❓</div>
+            <div>
+              <div class="status-label">ไม่พบข้อมูล</div>
+              <div class="status-title">ไม่พบ Serial Number นี้ในระบบ</div>
+            </div>
+          </div>
+          <p style="font-size:.88rem;color:var(--muted)">
+            หาก Serial Number ถูกต้องแต่ไม่พบข้อมูล กรุณาติดต่อเราโดยตรงที่<br/>
+            📞 <a href="tel:0915192945" style="color:var(--navy);font-weight:600">091-519-2945</a>
+            หรือ 💬 <a href="https://page.line.me/624izvff" target="_blank" style="color:var(--navy);font-weight:600">LINE: @dongroups</a>
+          </p>
+        </div>`;
+      return;
+    }
+
+    const customer = row.c[COL.customer]?.v || '-';
+    const brand    = COL.brand!=null ? (row.c[COL.brand]?.v || '-') : null;
+    const instDate = parseThaiDate(row.c[COL.installed]?.v || row.c[COL.installed]?.f);
+    const expDate  = parseThaiDate(row.c[COL.expiry]?.v || row.c[COL.expiry]?.f);
+
+    const today = new Date(); today.setHours(0,0,0,0);
+    const daysLeft = expDate ? Math.round((expDate-today)/(1000*60*60*24)) : null;
+    const totalDays= (instDate&&expDate) ? Math.round((expDate-instDate)/(1000*60*60*24)) : null;
+    const elapsed  = (instDate) ? Math.round((today-instDate)/(1000*60*60*24)) : null;
+    const pct = totalDays&&elapsed ? Math.max(0,Math.min(100,Math.round(elapsed/totalDays*100))) : 0;
+
+    const isValid = daysLeft!==null && daysLeft>0;
+    const cls = isValid ? 'valid' : 'expired';
+    const icon = isValid ? '✅' : '⚠️';
+    const statusLabel = isValid ? 'อยู่ในประกัน' : 'หมดประกันแล้ว';
+    const statusTitle = isValid
+      ? `เหลืออีก ${daysLeft} วัน จะหมดประกัน`
+      : `หมดประกันไปแล้ว ${Math.abs(daysLeft)} วัน`;
+    const daysCls = isValid ? 'days-valid' : 'days-expire';
+    const barPct = 100-pct;
+    const barCls = barPct>40?'green':barPct>15?'orange':'red';
+
+    el.innerHTML = `
+      <div class="result-card ${cls}">
+        <div class="result-header">
+          <div class="status-icon">${icon}</div>
+          <div>
+            <div class="status-label">${statusLabel}</div>
+            <div class="status-title">${statusTitle}</div>
+          </div>
+        </div>
+        <table class="result-table">
+          <tr><td>Serial Number</td><td>${serial}</td></tr>
+          <tr><td>ชื่อลูกค้า</td><td>${customer}</td></tr>
+          ${brand?`<tr><td>ยี่ห้อ/รุ่น</td><td>${brand}</td></tr>`:''}
+          <tr><td>วันติดตั้ง</td><td>${formatDate(instDate)}</td></tr>
+          <tr><td>วันหมดประกัน</td><td>${formatDate(expDate)}</td></tr>
+          <tr><td>สถานะ</td><td><span class="days-left ${daysCls}">${statusLabel}</span></td></tr>
+        </table>
+        ${totalDays?`
+        <div class="progress-bar"><div class="progress-fill ${barCls}" style="width:${100-pct}%"></div></div>
+        <div class="progress-label"><span>วันติดตั้ง</span><span>วันหมดประกัน</span></div>
+        `:''}
+        ${!isValid?`<div style="margin-top:1.25rem;padding:1rem;background:rgba(245,166,35,.12);border-radius:10px;font-size:.88rem">
+          <strong>🔔 ต้องการต่ออายุประกัน?</strong><br/>
+          ติดต่อเราเพื่อเปลี่ยนแบตเตอรี่และรับประกันใหม่ — <a href="submit.html" style="color:var(--amber);font-weight:700">แจ้งบริการ</a>
+        </div>`:''}
+      </div>`;
+  }
+
+  function showError(){
+    const el=document.getElementById('result');
+    el.style.display='block';
+    el.innerHTML=`
+      <div class="result-card notfound">
+        <div class="result-header">
+          <div class="status-icon">⚠️</div>
+          <div>
+            <div class="status-label">เกิดข้อผิดพลาด</div>
+            <div class="status-title">ไม่สามารถดึงข้อมูลได้</div>
+          </div>
+        </div>
+        <p style="font-size:.88rem;color:var(--muted)">กรุณาตรวจสอบว่า Google Sheet ตั้งค่าให้ใครก็ได้เปิดดูได้ หรือลองใหม่อีกครั้ง<br/>
+        หากยังไม่ได้ กรุณาติดต่อ 📞 091-519-2945</p>
+      </div>`;
+  }
+
+  // Enter key support
+  document.getElementById('serialInput').addEventListener('keydown',e=>{
+    if(e.key==='Enter') searchWarranty();
+  });
+</script>
+</body>
+</html>

@@ -179,10 +179,31 @@
   };
   // =========================================
 
-  function parseThaiDate(str) {
-  const d = new Date(str);
-  return isNaN(d) ? null : d;
-}
+  function parseThaiDate(val) {
+    if(val===null||val===undefined||val==='') return null;
+    const str = String(val).trim();
+
+    // 1) gviz: Date(2025,9,26) — month is 0-indexed
+    const gvizMatch = str.match(/^Date\((\d+),(\d+),(\d+)\)/);
+    if(gvizMatch){
+      const [,y,m,d] = gvizMatch.map(Number);
+      return new Date(y, m, d);
+    }
+
+    // 2) M/D/YYYY (gviz formatted, US format)
+    const slashParts = str.split('/');
+    if(slashParts.length===3){
+      let [a,b,y] = slashParts.map(Number);
+      if(y>2400) y -= 543;
+      if(y<100) y += 2000;
+      return new Date(y, a-1, b); // a=month(1-based), b=day
+    }
+
+    // 3) ISO or other
+    const d = new Date(str);
+    return isNaN(d.getTime()) ? null : d;
+  }
+
   function formatDate(d) {
     if(!d||isNaN(d)) return '-';
     return d.toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'});
@@ -241,8 +262,11 @@
 
     const customer = row.c[COL.customer]?.v || '-';
     const brand    = COL.brand!=null ? (row.c[COL.brand]?.v || '-') : null;
-    const instDate = parseThaiDate(row.c[COL.installed]?.v || row.c[COL.installed]?.f);
-    const expDate  = parseThaiDate(row.c[COL.expiry]?.v || row.c[COL.expiry]?.f);
+    // gviz returns date .v as "Date(Y,M,D)" string, .f as "M/D/YYYY" — try both
+    const instRaw  = row.c[COL.installed];
+    const expRaw   = row.c[COL.expiry];
+    const instDate = parseThaiDate(instRaw?.v ?? instRaw?.f);
+    const expDate  = parseThaiDate(expRaw?.v  ?? expRaw?.f);
 
     const today = new Date(); today.setHours(0,0,0,0);
     const daysLeft = expDate ? Math.round((expDate-today)/(1000*60*60*24)) : null;

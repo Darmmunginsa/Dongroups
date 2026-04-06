@@ -28,10 +28,19 @@ nav{position:sticky;top:0;z-index:100;background:var(--navy);padding:0 5vw;
 .nav-cta:hover{background:var(--amber2)!important}
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
 .hamburger span{width:24px;height:2px;background:#fff;border-radius:2px;transition:.3s}
-.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:var(--navy2);
-  flex-direction:column;padding:1rem 5vw;gap:0;z-index:99;border-top:1px solid rgba(255,255,255,.1)}
-.mobile-menu a{color:rgba(255,255,255,.85);padding:.85rem 0;font-size:.95rem;
-  border-bottom:1px solid rgba(255,255,255,.08)}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;
+  background:#071429;
+  flex-direction:column;padding:.5rem 0;gap:0;z-index:999;
+  border-top:3px solid var(--amber);
+  box-shadow:0 12px 40px rgba(0,0,0,.7)}
+.mobile-menu a{color:#fff;padding:1rem 6vw;font-size:1rem;font-weight:500;
+  border-bottom:1px solid rgba(255,255,255,.07);display:block;
+  transition:background .15s,color .15s}
+.mobile-menu a:hover,.mobile-menu a.active{background:rgba(245,166,35,.12);color:var(--amber)}
+.mobile-menu a:last-child{border-bottom:none;background:var(--amber);
+  color:var(--navy);font-weight:700;text-align:center;margin:1rem 6vw .75rem;
+  border-radius:10px;border:none}
+.mobile-menu a:last-child:hover{background:var(--amber2)}
 .mobile-menu.open{display:flex}
 
 /* ── BUTTONS ── */

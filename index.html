@@ -38,7 +38,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -98,8 +98,15 @@
       transition: background .2s !important;
     }
     .nav-cta:hover { background: var(--amber2) !important; color: var(--navy) !important; }
-    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding:4px; }
     .hamburger span { width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: .3s; }
+    .mobile-menu { display: none; position: fixed; top: 64px; left: 0; right: 0;
+      background: #112550; flex-direction: column; padding: 1rem 5vw; gap: 0; z-index: 99;
+      border-top: 1px solid rgba(255,255,255,.1); }
+    .mobile-menu a { color: rgba(255,255,255,.85); padding: .85rem 0; font-size: .95rem;
+      border-bottom: 1px solid rgba(255,255,255,.08); text-decoration: none; }
+    .mobile-menu a:hover { color: #f5a623; }
+    .mobile-menu.open { display: flex; }
 
     /* ── HERO ── */
     .hero {
@@ -413,6 +420,14 @@
       <span></span><span></span><span></span>
     </div>
   </nav>
+  <nav class="mobile-menu" aria-label="เมนูมือถือ">
+    <a href="index.html">หน้าแรก</a>
+    <a href="services.html">บริการของเรา</a>
+    <a href="warranty.html">ตรวจสอบ Warranty</a>
+    <a href="ups-info.html">ข้อมูล UPS</a>
+    <a href="faq.html">FAQ</a>
+    <a href="submit.html">แจ้งบริการ</a>
+  </nav>
 
   <!-- ── HERO ── -->
   <header class="hero">
@@ -574,7 +589,7 @@
       <div class="howto-cta-box">
         <h3>ไม่แน่ใจเรื่องเครื่อง UPS?</h3>
         <p>ติดต่อทีมช่างเพื่อปรึกษาตรวจเช็กอาการเบื้องต้น <strong style="color:var(--amber)">ฟรี ไม่มีค่าใช้จ่าย</strong></p>
-        <a href="/submit.html" class="btn-amber">
+        <a href="submit.html" class="btn-amber">
           📋 แจ้งบริการออนไลน์
         </a>
         <a href="tel:0915192945" class="btn-amber" style="background:rgba(255,255,255,.1); color:#fff; border:1.5px solid rgba(255,255,255,.2);">
@@ -642,7 +657,7 @@
       </details>
       <details>
         <summary>สามารถตรวจสอบ Warranty ได้อย่างไร?</summary>
-        <p>เข้าไปที่หน้า <a href="/warranty.html" style="color:var(--amber); font-weight:600;">ตรวจสอบ Warranty</a> แล้วกรอกข้อมูลเครื่องของคุณ ระบบจะแสดงสถานะประกันทันที</p>
+        <p>เข้าไปที่หน้า <a href="warranty.html" style="color:var(--amber); font-weight:600;">ตรวจสอบ Warranty</a> แล้วกรอกข้อมูลเครื่องของคุณ ระบบจะแสดงสถานะประกันทันที</p>
       </details>
       <details>
         <summary>ใช้บริการได้ทั่วประเทศไหม?</summary>
@@ -722,18 +737,18 @@
       📞 โทร
     </a>
   </div>
-  
+
+  <script src="main.js"></script>
   <script>
     function handleSubmit(e) {
       e.preventDefault();
       const fd = new FormData(e.target);
       const data = Object.fromEntries(fd.entries());
       // ส่งไปยัง Google Apps Script (ใส่ URL จาก deployment ของพี่ที่นี่)
-      const SHEET_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL';
+      const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwe6F-Rfva31oQGTYQz7QdsyKw7SzETs5rO7gSp9olw42uGvHuWmuAZbxPnSW1hrcDTkw/exec';
       alert('ขอบคุณครับ! เราจะติดต่อกลับภายใน 24 ชม. 📞');
       e.target.reset();
     }
   </script>
-<script src="main.js"></script>  
 </body>
 </html>

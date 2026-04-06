@@ -101,11 +101,16 @@
     .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding:4px; }
     .hamburger span { width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: .3s; }
     .mobile-menu { display: none; position: fixed; top: 64px; left: 0; right: 0;
-      background: #112550; flex-direction: column; padding: 1rem 5vw; gap: 0; z-index: 99;
-      border-top: 1px solid rgba(255,255,255,.1); }
-    .mobile-menu a { color: rgba(255,255,255,.85); padding: .85rem 0; font-size: .95rem;
-      border-bottom: 1px solid rgba(255,255,255,.08); text-decoration: none; }
-    .mobile-menu a:hover { color: #f5a623; }
+      background: #071429; flex-direction: column; padding: .5rem 0; gap: 0; z-index: 999;
+      border-top: 3px solid #f5a623;
+      box-shadow: 0 12px 40px rgba(0,0,0,.7); }
+    .mobile-menu a { color: #fff; padding: 1rem 6vw; font-size: 1rem; font-weight: 500;
+      border-bottom: 1px solid rgba(255,255,255,.07); display: block;
+      text-decoration: none; transition: background .15s, color .15s; }
+    .mobile-menu a:hover { background: rgba(245,166,35,.12); color: #f5a623; }
+    .mobile-menu a:last-child { border-bottom: none; background: #f5a623;
+      color: #0b1e3d; font-weight: 700; text-align: center;
+      margin: 1rem 6vw .75rem; border-radius: 10px; }
     .mobile-menu.open { display: flex; }
 
     /* ── HERO ── */

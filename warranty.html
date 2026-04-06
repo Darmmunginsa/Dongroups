@@ -63,7 +63,8 @@
     .progress-fill.green{background:var(--success)}
     .progress-fill.red{background:var(--danger)}
     .progress-fill.orange{background:#f5a623}
-    .progress-label{display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted);margin-top:.35rem}
+    .progress-label{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);margin-top:.5rem;line-height:1.5}
+    .progress-label strong{display:block;color:var(--navy);font-size:.8rem}
 
     .loading{text-align:center;padding:2rem;color:var(--muted);font-size:.9rem;display:none}
     .spinner{display:inline-block;width:28px;height:28px;border:3px solid var(--border);
@@ -283,8 +284,8 @@
       ? `เหลืออีก ${daysLeft} วัน จะหมดประกัน`
       : `หมดประกันไปแล้ว ${Math.abs(daysLeft)} วัน`;
     const daysCls = isValid ? 'days-valid' : 'days-expire';
-    const barPct = 100-pct;
-    const barCls = barPct>40?'green':barPct>15?'orange':'red';
+    // สี bar = สะท้อนความใกล้หมดประกัน (เขียว=ยังนาน, ส้ม=ใกล้, แดง=ใกล้มาก/หมดแล้ว)
+    const barCls = !isValid?'red':pct<60?'green':pct<85?'orange':'red';
 
     el.innerHTML = `
       <div class="result-card ${cls}">
@@ -304,8 +305,19 @@
           <tr><td>สถานะ</td><td><span class="days-left ${daysCls}">${statusLabel}</span></td></tr>
         </table>
         ${totalDays?`
-        <div class="progress-bar"><div class="progress-fill ${barCls}" style="width:${100-pct}%"></div></div>
-        <div class="progress-label"><span>วันติดตั้ง</span><span>วันหมดประกัน</span></div>
+        <div style="margin-top:1.25rem">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem">
+            <span style="font-size:.75rem;color:var(--muted)">เวลาที่ใช้ไปแล้ว</span>
+            <span style="font-size:.8rem;font-weight:700;color:var(--navy)">${pct}%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill ${barCls}" style="width:${pct}%"></div>
+          </div>
+          <div class="progress-label">
+            <span>📅 วันติดตั้ง<br/><strong>${formatDate(instDate)}</strong></span>
+            <span style="text-align:right">วันหมดประกัน 📅<br/><strong>${formatDate(expDate)}</strong></span>
+          </div>
+        </div>
         `:''}
         ${!isValid?`<div style="margin-top:1.25rem;padding:1rem;background:rgba(245,166,35,.12);border-radius:10px;font-size:.88rem">
           <strong>🔔 ต้องการต่ออายุประกัน?</strong><br/>

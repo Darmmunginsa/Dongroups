@@ -1,0 +1,1 @@
+window.SERVICE_CONFIG={"endpoint":"https://script.google.com/macros/s/AKfycbx2CeS2qOlAngvoDtn_SHY9WKgcO0bZ2lQ2DX6bQfaOY0dkMn0FqPqjOPLlpLsboUFw0w/exec","tileUrl":"https://tile.openstreetmap.org/{z}/{x}/{y}.png"};

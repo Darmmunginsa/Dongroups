@@ -1,8 +1,19 @@
+async function sendServiceRequest(payload,config,signal,fetcher=fetch){
+ if(!config?.endpoint)throw new Error('Missing endpoint');
+ const confirmed=config.responseMode==='confirmed-json';
+ const headers={'Content-Type':'text/plain;charset=UTF-8'};
+ const response=await fetcher(config.endpoint,{method:'POST',mode:confirmed?'cors':'no-cors',headers,body:JSON.stringify(payload),signal});
+ if(!confirmed||response.type==='opaque')return {confirmed:false};
+ if(!response.ok)throw new Error('Request rejected');
+ const ack=await response.json();
+ if(ack?.ok!==true||typeof ack.requestId!=='string'||!ack.requestId.trim())throw new Error('No confirmed receipt');
+ return {confirmed:true};
+}
 'use strict';
 const serviceForm=document.getElementById('serviceForm');const submitButton=document.getElementById('btnSubmit');const formError=document.getElementById('formError');
 function localServiceDate(now=new Date()){const parts=new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Bangkok',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(now);const get=type=>parts.find(part=>part.type===type).value;return `${get('year')}-${get('month')}-${get('day')}`;}
 function validServicePhone(value){return /^\+?[\d\s().-]+$/.test(value)&&value.replace(/\D/g,'').length>=9&&value.replace(/\D/g,'').length<=15;}
-function buildServicePayload(form,services,now=new Date()){const get=key=>{const value=String(form.get(key)??'').trim();return value==='__other__'&&['brand','model'].includes(key)?String(form.get(key+'Custom')??'').trim()||'ไม่ระบุ':value||'-';};return {timestamp:now.toLocaleString('th-TH',{timeZone:'Asia/Bangkok'}),name:get('name'),phone:get('phone'),services:services.join(', '),brand:get('brand'),model:get('model'),detail:get('detail'),address:get('address'),lat:get('lat'),lng:get('lng'),mapLink:get('mapLink'),preferDate:get('preferDate'),preferTime:get('preferTime'),coordinator:get('coordinator'),status:'รอดำเนินการ'};}
+function buildServicePayload(form,services,now=new Date()){const get=key=>{const value=String(form.get(key)??'').trim();return value==='__other__'&&['brand','model'].includes(key)?String(form.get(key+'Custom')??'').trim()||'ไม่ระบุ':value||'-';};return {timestamp:now.toLocaleString('th-TH',{timeZone:'Asia/Bangkok'}),name:get('name'),phone:get('phone'),services:services.join(', '),brand:get('brand'),model:get('model'),detail:`จำนวน ${get('quantity')} เครื่อง · ${get('detail')}`,address:get('address'),lat:get('lat'),lng:get('lng'),mapLink:get('mapLink'),preferDate:get('preferDate'),preferTime:get('preferTime'),coordinator:get('coordinator'),status:'รอดำเนินการ'};}
 document.getElementById('preferDate').min=localServiceDate();
 for(const id of ['name','phone','address','preferDate'])document.getElementById(id).addEventListener('input',event=>event.target.setCustomValidity(''));
 for(const input of serviceForm.querySelectorAll('input[name="service"]'))input.addEventListener('change',()=>{document.getElementById('serviceError').hidden=true;input.removeAttribute('aria-invalid');});
@@ -10,19 +21,19 @@ serviceForm.addEventListener('submit',async event=>{
  event.preventDefault();if(submitButton.disabled)return;formError.hidden=true;
  const services=[...serviceForm.querySelectorAll('input[name="service"]:checked')].map(input=>input.value);
  if(!services.length){document.getElementById('serviceError').hidden=false;const first=document.getElementById('s1');first.setAttribute('aria-describedby','serviceError');first.setAttribute('aria-invalid','true');first.focus();return;}
- for(const id of ['name','address']){const field=document.getElementById(id);field.setCustomValidity(field.value.trim()?'':'กรุณากรอกข้อมูลนี้');}
+ for(const id of ['name','address','detail']){const field=document.getElementById(id);field.setCustomValidity(field.value.trim()?'':'กรุณากรอกข้อมูลนี้');}
  const phone=document.getElementById('phone');phone.setCustomValidity(validServicePhone(phone.value.trim())?'':'กรุณากรอกเบอร์โทรให้ถูกต้อง');
  const date=document.getElementById('preferDate');date.min=localServiceDate();date.setCustomValidity(date.value&&date.value<date.min?'กรุณาเลือกวันนี้หรือวันถัดไป':'');
  if(!serviceForm.reportValidity())return;
  const payload=buildServicePayload(new FormData(serviceForm),services);submitButton.disabled=true;submitButton.textContent='กำลังส่งคำขอ…';serviceForm.setAttribute('aria-busy','true');
  const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),20000);
  try{
-  if(!window.SERVICE_CONFIG?.endpoint)throw new Error('Missing endpoint');
-  // Preserve the existing JSON payload while using a CORS-safelisted content type.
-  await fetch(window.SERVICE_CONFIG.endpoint,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify(payload),signal:controller.signal});
+  const outcome=await sendServiceRequest(payload,window.SERVICE_CONFIG,controller.signal);
+  if(!outcome.confirmed){formError.textContent='ส่งคำขอออกจากหน้าเว็บแล้ว แต่ยังยืนยันการรับข้อมูลปลายทางไม่ได้ กรุณาติดต่อทีมงานผ่าน LINE หรือโทรก่อนส่งซ้ำ';formError.hidden=false;formError.focus();return;}
   const summary=document.getElementById('sentSummary');summary.replaceChildren();for(const text of [`ผู้ติดต่อ: ${payload.name}`,`เบอร์โทร: ${payload.phone}`,`บริการ: ${payload.services}`]){const line=document.createElement('p');line.textContent=text;summary.appendChild(line);}
+  trackSiteEvent('service_request_confirmed');
   serviceForm.hidden=true;const success=document.getElementById('successMsg');success.hidden=false;success.tabIndex=-1;success.focus();
- }catch(error){formError.textContent=error.name==='AbortError'?'ยังยืนยันผลการส่งไม่ได้ กรุณาติดต่อทีมงานก่อนส่งซ้ำ ข้อมูลที่กรอกยังอยู่ครบ':'ยังส่งคำขอไม่ได้ กรุณาลองใหม่หรือติดต่อทีมงาน ข้อมูลที่กรอกยังอยู่ครบ';formError.hidden=false;formError.tabIndex=-1;formError.focus();}
+ }catch(error){formError.textContent=error.name==='AbortError'?'ยังยืนยันผลการส่งไม่ได้ กรุณาติดต่อทีมงานก่อนส่งซ้ำ ข้อมูลที่กรอกยังอยู่ครบ':'ยังยืนยันการรับคำขอไม่ได้ กรุณาติดต่อทีมงานก่อนส่งซ้ำ ข้อมูลที่กรอกยังอยู่ครบ';formError.hidden=false;formError.tabIndex=-1;formError.focus();}
  finally{clearTimeout(timeout);submitButton.disabled=false;submitButton.textContent='ส่งคำขอแจ้งบริการ →';serviceForm.removeAttribute('aria-busy');}
 });
 document.getElementById('newRequest').addEventListener('click',()=>{serviceForm.reset();document.getElementById('successMsg').hidden=true;serviceForm.hidden=false;clearServiceLocation();document.getElementById('s1').focus();});

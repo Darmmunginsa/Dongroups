@@ -18,7 +18,7 @@ function escapeWarranty(value){return String(value).replace(/[&<>"']/g,char=>({'
 function formatWarrantyDate(date){return date?new Intl.DateTimeFormat('th-TH',{timeZone:'UTC',year:'numeric',month:'long',day:'numeric'}).format(date):'ยังไม่มีข้อมูล';}
 function renderWarranty(row,serial){
  const result=document.getElementById('result');result.hidden=false;
- if(!row){result.innerHTML='<div class="warranty-result unknown"><span class="result-kicker">SEARCH RESULT</span><h3>ไม่พบข้อมูลหมายเลขเครื่องนี้</h3><p>ตรวจตัวอักษรและตัวเลขอีกครั้ง หากถูกต้องแล้ว กรุณาส่ง Serial Number ให้ทีมงานตรวจสอบ</p><a class="text-link" href="https://page.line.me/624izvff" target="_blank" rel="noopener">ให้ทีมงานช่วยตรวจสอบ ↗</a></div>';return;}
+ if(!row){result.innerHTML='<div class="warranty-result unknown"><span class="result-kicker">SEARCH RESULT</span><h3>ไม่พบข้อมูลหมายเลขเครื่องนี้</h3><p>ตรวจตัวอักษรและตัวเลขอีกครั้ง หากถูกต้องแล้ว กรุณาส่ง Serial Number ให้ทีมงานตรวจสอบ</p><a class="text-link" href="https://line.me/ti/p/7WVA7WKmYW" target="_blank" rel="noopener">ให้ทีมงานช่วยตรวจสอบ ↗</a></div>';return;}
  const col=WARRANTY_CONFIG.columns;const cell=index=>row.c?.[index];const text=index=>escapeWarranty(cell(index)?.v??'-');const date=index=>parseWarrantyDate(cell(index)?.v)??parseWarrantyDate(cell(index)?.f);
  const installed=date(col.installed),expiry=date(col.expiry),today=bangkokToday(),status=warrantyStatus(expiry,today);
  const duration=installed&&expiry?(expiry-installed)/86400000:null;const progress=duration>0?Math.max(0,Math.min(100,Math.round((today-installed)/86400000/duration*100))):null;
@@ -31,7 +31,7 @@ async function searchWarranty(event){
  button.disabled=true;button.textContent='กำลังค้นหา…';loading.hidden=false;result.hidden=true;form.setAttribute('aria-busy','true');
  const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),15000);
  try{const response=await fetch(`https://docs.google.com/spreadsheets/d/${WARRANTY_CONFIG.sheetId}/gviz/tq?tqx=out:json&gid=${WARRANTY_CONFIG.gid}`,{signal:controller.signal});if(!response.ok)throw new Error('Lookup failed');const payload=await response.text();const match=payload.match(/^[\s\S]*?\(([\s\S]*)\);?\s*$/);if(!match)throw new Error('Invalid response');const data=JSON.parse(match[1]);if(!Array.isArray(data.table?.rows))throw new Error('Missing data');const row=data.table.rows.find(row=>String(row.c?.[WARRANTY_CONFIG.columns.serial]?.v??'').trim().toUpperCase()===serial);renderWarranty(row,serial);}
- catch{result.hidden=false;result.innerHTML='<div class="warranty-result unknown"><span class="result-kicker">CONNECTION UNAVAILABLE</span><h3>ยังไม่สามารถค้นหาข้อมูลได้</h3><p>ลองค้นหาอีกครั้ง หรือติดต่อทีมงานพร้อมแจ้ง Serial Number ของเครื่อง</p><a class="text-link" href="tel:0915192945">โทร 091-519-2945 ↗</a></div>';}
+ catch{result.hidden=false;result.innerHTML='<div class="warranty-result unknown"><span class="result-kicker">CONNECTION UNAVAILABLE</span><h3>ยังไม่สามารถค้นหาข้อมูลได้</h3><p>ลองค้นหาอีกครั้ง หรือติดต่อทีมงานพร้อมแจ้ง Serial Number ของเครื่อง</p><a class="text-link" href="tel:0652629886">โทร 065 262 9886 ↗</a></div>';}
  finally{clearTimeout(timeout);loading.hidden=true;button.disabled=false;button.textContent='ค้นหาประกัน →';form.removeAttribute('aria-busy');}
 }
 document.getElementById('warrantyForm').addEventListener('submit',searchWarranty);

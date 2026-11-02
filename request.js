@@ -7,7 +7,7 @@ async function sendServiceRequest(payload,config,signal,fetcher=fetch){
  if(!response.ok)throw new Error('Request rejected');
  const ack=await response.json();
  if(ack?.ok!==true||typeof ack.requestId!=='string'||!ack.requestId.trim())throw new Error('No confirmed receipt');
- return {confirmed:true};
+ return {confirmed:true,requestId:ack.requestId};
 }
 'use strict';
 const serviceForm=document.getElementById('serviceForm');const submitButton=document.getElementById('btnSubmit');const formError=document.getElementById('formError');
@@ -31,7 +31,8 @@ serviceForm.addEventListener('submit',async event=>{
   const outcome=await sendServiceRequest(payload,window.SERVICE_CONFIG,controller.signal);
   if(!outcome.confirmed){formError.textContent='ส่งคำขอออกจากหน้าเว็บแล้ว แต่ยังยืนยันการรับข้อมูลปลายทางไม่ได้ กรุณาติดต่อทีมงานผ่าน LINE หรือโทรก่อนส่งซ้ำ';formError.hidden=false;formError.focus();return;}
   const summary=document.getElementById('sentSummary');summary.replaceChildren();for(const text of [`ผู้ติดต่อ: ${payload.name}`,`เบอร์โทร: ${payload.phone}`,`บริการ: ${payload.services}`]){const line=document.createElement('p');line.textContent=text;summary.appendChild(line);}
-  trackSiteEvent('service_request_confirmed');
+  // Measurement must never prevent a successful service request from completing.
+  try{trackSiteEvent('service_request_confirmed',outcome.requestId);}catch{}
   serviceForm.hidden=true;const success=document.getElementById('successMsg');success.hidden=false;success.tabIndex=-1;success.focus();
  }catch(error){formError.textContent=error.name==='AbortError'?'ยังยืนยันผลการส่งไม่ได้ กรุณาติดต่อทีมงานก่อนส่งซ้ำ ข้อมูลที่กรอกยังอยู่ครบ':'ยังยืนยันการรับคำขอไม่ได้ กรุณาติดต่อทีมงานก่อนส่งซ้ำ ข้อมูลที่กรอกยังอยู่ครบ';formError.hidden=false;formError.tabIndex=-1;formError.focus();}
  finally{clearTimeout(timeout);submitButton.disabled=false;submitButton.textContent='ส่งคำขอแจ้งบริการ →';serviceForm.removeAttribute('aria-busy');}

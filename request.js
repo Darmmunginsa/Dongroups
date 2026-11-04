@@ -14,11 +14,15 @@ const serviceForm=document.getElementById('serviceForm');const submitButton=docu
 function localServiceDate(now=new Date()){const parts=new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Bangkok',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(now);const get=type=>parts.find(part=>part.type===type).value;return `${get('year')}-${get('month')}-${get('day')}`;}
 function validServicePhone(value){return /^\+?[\d\s().-]+$/.test(value)&&value.replace(/\D/g,'').length>=9&&value.replace(/\D/g,'').length<=15;}
 function buildServicePayload(form,services,now=new Date()){const get=key=>{const value=String(form.get(key)??'').trim();return value==='__other__'&&['brand','model'].includes(key)?String(form.get(key+'Custom')??'').trim()||'ไม่ระบุ':value||'-';};return {timestamp:now.toLocaleString('th-TH',{timeZone:'Asia/Bangkok'}),name:get('name'),phone:get('phone'),services:services.join(', '),brand:get('brand'),model:get('model'),detail:`จำนวน ${get('quantity')} เครื่อง · ${get('detail')}`,address:get('address'),lat:get('lat'),lng:get('lng'),mapLink:get('mapLink'),preferDate:get('preferDate'),preferTime:get('preferTime'),coordinator:get('coordinator'),status:'รอดำเนินการ'};}
+function serviceContactText(payload){return ['ขอประเมินบริการ UPS',`ผู้ติดต่อ: ${payload.name}`,`โทร: ${payload.phone}`,`บริการ: ${payload.services}`,`เครื่อง: ${payload.brand} / ${payload.model}`,payload.detail,`สถานที่: ${payload.address}`,payload.mapLink!=='-'?`แผนที่: ${payload.mapLink}`:'',payload.preferDate!=='-'?`วันที่สะดวก: ${payload.preferDate} ${payload.preferTime==='-'?'':payload.preferTime}`:''].filter(Boolean).join('\n');}
+function showServiceHandoff(payload){document.getElementById('handoffText').value=serviceContactText(payload);document.getElementById('serviceHandoff').hidden=false;document.getElementById('handoffStatus').textContent='คัดลอกรายละเอียด แล้วเปิด LINE เพื่อวางและส่งให้ทีมงานด้วยตนเอง';}
+
 document.getElementById('preferDate').min=localServiceDate();
+document.getElementById('copyServiceDetails').addEventListener('click',async()=>{const field=document.getElementById('handoffText');try{await navigator.clipboard.writeText(field.value);document.getElementById('handoffStatus').textContent='คัดลอกแล้ว เปิด LINE แล้ววางข้อความและกดส่งได้เลย';}catch{field.focus();field.select();document.getElementById('handoffStatus').textContent='กรุณาคัดลอกข้อความที่เลือกไว้ แล้วนำไปวางใน LINE';}});
 for(const id of ['name','phone','address','preferDate'])document.getElementById(id).addEventListener('input',event=>event.target.setCustomValidity(''));
 for(const input of serviceForm.querySelectorAll('input[name="service"]'))input.addEventListener('change',()=>{document.getElementById('serviceError').hidden=true;input.removeAttribute('aria-invalid');});
 serviceForm.addEventListener('submit',async event=>{
- event.preventDefault();if(submitButton.disabled)return;formError.hidden=true;
+ event.preventDefault();if(submitButton.disabled)return;formError.hidden=true;document.getElementById('serviceHandoff').hidden=true;
  const services=[...serviceForm.querySelectorAll('input[name="service"]:checked')].map(input=>input.value);
  if(!services.length){document.getElementById('serviceError').hidden=false;const first=document.getElementById('s1');first.setAttribute('aria-describedby','serviceError');first.setAttribute('aria-invalid','true');first.focus();return;}
  for(const id of ['name','address','detail']){const field=document.getElementById(id);field.setCustomValidity(field.value.trim()?'':'กรุณากรอกข้อมูลนี้');}
@@ -29,12 +33,12 @@ serviceForm.addEventListener('submit',async event=>{
  const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),20000);
  try{
   const outcome=await sendServiceRequest(payload,window.SERVICE_CONFIG,controller.signal);
-  if(!outcome.confirmed){formError.textContent='ส่งคำขอออกจากหน้าเว็บแล้ว แต่ยังยืนยันการรับข้อมูลปลายทางไม่ได้ กรุณาติดต่อทีมงานผ่าน LINE หรือโทรก่อนส่งซ้ำ';formError.hidden=false;formError.focus();return;}
+  if(!outcome.confirmed){formError.textContent='ส่งคำขอออกจากหน้าเว็บแล้ว แต่ยังยืนยันการรับข้อมูลปลายทางไม่ได้ กรุณาส่งรายละเอียดทาง LINE หรือโทรให้ทีมงานตรวจสอบก่อนส่งซ้ำ';formError.hidden=false;formError.tabIndex=-1;showServiceHandoff(payload);formError.focus();return;}
   const summary=document.getElementById('sentSummary');summary.replaceChildren();for(const text of [`ผู้ติดต่อ: ${payload.name}`,`เบอร์โทร: ${payload.phone}`,`บริการ: ${payload.services}`]){const line=document.createElement('p');line.textContent=text;summary.appendChild(line);}
   // Measurement must never prevent a successful service request from completing.
   try{trackSiteEvent('service_request_confirmed',outcome.requestId);}catch{}
   serviceForm.hidden=true;const success=document.getElementById('successMsg');success.hidden=false;success.tabIndex=-1;success.focus();
- }catch(error){formError.textContent=error.name==='AbortError'?'ยังยืนยันผลการส่งไม่ได้ กรุณาติดต่อทีมงานก่อนส่งซ้ำ ข้อมูลที่กรอกยังอยู่ครบ':'ยังยืนยันการรับคำขอไม่ได้ กรุณาติดต่อทีมงานก่อนส่งซ้ำ ข้อมูลที่กรอกยังอยู่ครบ';formError.hidden=false;formError.tabIndex=-1;formError.focus();}
+ }catch(error){formError.textContent=error.name==='AbortError'?'ยังยืนยันผลการส่งไม่ได้ กรุณาติดต่อทีมงานก่อนส่งซ้ำ ข้อมูลที่กรอกยังอยู่ครบ':'ยังยืนยันการรับคำขอไม่ได้ กรุณาติดต่อทีมงานก่อนส่งซ้ำ ข้อมูลที่กรอกยังอยู่ครบ';formError.hidden=false;formError.tabIndex=-1;showServiceHandoff(payload);formError.focus();}
  finally{clearTimeout(timeout);submitButton.disabled=false;submitButton.textContent='ส่งคำขอแจ้งบริการ →';serviceForm.removeAttribute('aria-busy');}
 });
 document.getElementById('newRequest').addEventListener('click',()=>{serviceForm.reset();document.getElementById('successMsg').hidden=true;serviceForm.hidden=false;clearServiceLocation();document.getElementById('s1').focus();});

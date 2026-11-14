@@ -1,10 +1,14 @@
-(async()=>{
- const q=new URLSearchParams(location.search),id=q.get('id'),serial=DonnetReport.serial(q.get('serial')),message=document.getElementById('message'),frame=document.getElementById('report');
+(()=>{
+ const q=new URLSearchParams(location.search),id=q.get('id'),serial=DonnetReport.serial(q.get('serial')),message=document.getElementById('message'),frame=document.getElementById('report'),form=document.getElementById('unlock'),password=document.getElementById('password'),button=document.getElementById('unlock-button');
+ let accessPassword='',expiryTimer=null;
+ form.onsubmit=async e=>{e.preventDefault();if(button.disabled)return;button.disabled=true;message.textContent='กำลังตรวจสอบรหัสและโหลดรายงาน...';
  try{
-  if(!/^[A-Za-z0-9_-]{1,80}$/.test(id||'')||!serial)throw Error();
-  const config=window.WARRANTY_API_CONFIG;if(!config?.enabled||!config.endpoint)throw Error();
-  const response=await fetch(config.endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({serial,reportId:id}),signal:AbortSignal.timeout(20000),credentials:'omit',cache:'no-store'});
-  if(!response.ok)throw Error();const data=await response.json();if(data.ok!==true||!data.found||data.report?.fields?.serial!==serial||!data.report.signedAt)throw Error();
-  const r=DonnetReport.publicCopy(data.report);frame.srcdoc=DonnetReport.render(r);frame.hidden=false;message.hidden=true;document.getElementById('print').disabled=false;document.getElementById('print').onclick=()=>frame.contentWindow.print();
- }catch{message.textContent='ไม่พบรายงานที่เผยแพร่ หรือรายงานถูกหยุดเผยแพร่แล้ว กรุณาติดต่อทีมงาน D On Net';}
+  if(!/^[A-Za-z0-9_-]{1,80}$/.test(id||'')||!serial)throw Error('ลิงก์รายงานไม่ถูกต้อง กรุณาติดต่อทีมงาน');
+  const config=window.WARRANTY_API_CONFIG;if(!config?.enabled||!config.endpoint)throw Error('ยังเปิดรายงานไม่ได้ กรุณาติดต่อทีมงาน');
+  const response=await fetch(config.endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({serial,reportId:id,password:password.value}),signal:AbortSignal.timeout(20000),credentials:'omit',cache:'no-store'});
+  if(response.status===429)throw Error('ลองหลายครั้งเกินไป กรุณารอสักครู่แล้วลองใหม่');
+  if(!response.ok)throw Error('ยังเปิดรายงานไม่ได้ กรุณาลองใหม่ภายหลัง');const data=await response.json();if(data.passwordRequired)throw Error('รหัสผ่านไม่ถูกต้อง หรือยังไม่ได้ตั้งรหัส กรุณาติดต่อทีมงาน');if(data.ok!==true||!data.found||data.report?.fields?.serial!==serial||!data.report.signedAt)throw Error('ไม่พบรายงานที่เผยแพร่ กรุณาติดต่อทีมงาน');
+  const r=DonnetReport.publicCopy(data.report);frame.srcdoc=DonnetReport.render(r);frame.hidden=false;form.hidden=true;accessPassword=password.value;password.value='';const withdraw=document.getElementById('withdraw');withdraw.hidden=false;if(data.expiresAt){message.textContent='เปิดดูและดาวน์โหลดได้ถึง '+new Date(data.expiresAt).toLocaleString('th-TH');document.getElementById('access-expiry').textContent=message.textContent;clearInterval(expiryTimer);expiryTimer=setInterval(()=>{if(Date.now()<Date.parse(data.expiresAt))return;clearInterval(expiryTimer);frame.srcdoc='';frame.hidden=true;form.hidden=false;accessPassword='';withdraw.hidden=true;document.getElementById('print').disabled=true;message.textContent='ครบกำหนดเปิดรายงานบน Web แล้ว กรุณาติดต่อทีมงานหากต้องการเปิดอีกครั้ง';},1000);}withdraw.onclick=async()=>{if(!confirm('ปิดการเข้าถึงรายงานนี้บน Web ทันที? ต้นฉบับยังอยู่กับทีมงาน และไฟล์ที่ดาวน์โหลดแล้วจะไม่ถูกลบ'))return;withdraw.disabled=true;try{const res=await fetch(config.endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({serial,reportId:id,password:accessPassword,intent:'withdraw'}),signal:AbortSignal.timeout(20000),credentials:'omit',cache:'no-store'});const result=await res.json();if(!res.ok||!result.withdrawn)throw Error('ปิดการเข้าถึงไม่สำเร็จ กรุณาลองใหม่หรือติดต่อทีมงาน');frame.srcdoc='';frame.hidden=true;form.hidden=false;withdraw.hidden=true;accessPassword='';document.getElementById('print').disabled=true;message.textContent='ปิดการเข้าถึงบน Web แล้ว ต้นฉบับยังอยู่กับทีมงาน';}catch(err){alert(err.message);}finally{withdraw.disabled=false;}};document.getElementById('print').disabled=false;document.getElementById('print').onclick=()=>frame.contentWindow.print();
+ }catch(err){message.textContent=err.message||'เชื่อมต่อไม่สำเร็จ กรุณาลองใหม่';}finally{button.disabled=false;}
+ };
 })();

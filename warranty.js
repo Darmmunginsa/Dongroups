@@ -27,8 +27,14 @@ async function searchWarranty(event){
  const button=document.getElementById('searchButton'),loading=document.getElementById('loading'),result=document.getElementById('result');if(button.disabled)return;
  button.disabled=true;button.textContent='กำลังค้นหา…';loading.hidden=false;result.hidden=true;form.setAttribute('aria-busy','true');
  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),20000);
- try{const config=window.WARRANTY_API_CONFIG;if(!config?.enabled||!config.endpoint)throw Error('Lookup unavailable');const response=await fetch(config.endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({serial}),signal:controller.signal,credentials:'omit',cache:'no-store'});if(!response.ok)throw Error('Lookup unavailable');const data=await response.json();if(data.ok!==true||typeof data.found!=='boolean')throw Error('Invalid receipt');if(!data.found){renderWarranty(null,serial);return;}const w=data.warranty;if(w?.serial!==serial||!parseWarrantyDate(w.startDate)||!parseWarrantyDate(w.expiryDate))throw Error('Invalid warranty');renderWarranty(w,serial);}
+ try{const config=window.WARRANTY_API_CONFIG;if(!config?.enabled||!config.endpoint)throw Error('Lookup unavailable');const response=await fetch(config.endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({serial}),signal:controller.signal,credentials:'omit',cache:'no-store'});if(!response.ok)throw Error('Lookup unavailable');const data=await response.json();if(data.ok!==true||typeof data.found!=='boolean')throw Error('Invalid receipt');if(!data.found){renderWarranty(null,serial);return;}const w=data.warranty;if(w?.serial!==serial||!parseWarrantyDate(w.startDate)||!parseWarrantyDate(w.expiryDate))throw Error('Invalid warranty');renderWarranty(w,serial);renderServiceReports(data.reports||[],serial);}
  catch{result.hidden=false;result.innerHTML='<div class="warranty-result unknown"><h3>ยังตรวจสอบข้อมูลไม่ได้</h3><p>กรุณาติดต่อทีมงานพร้อม Serial Number และใบงาน</p><a class="text-link" href="tel:0652629886">โทร 065 262 9886 ↗</a></div>';}
  finally{clearTimeout(timeout);loading.hidden=true;button.disabled=false;button.textContent='ค้นหาประกัน →';form.removeAttribute('aria-busy');}
 }
 document.getElementById('warrantyForm').addEventListener('submit',searchWarranty);
+
+function renderServiceReports(reports,serial){
+ const result=document.getElementById('result');if(!result||!reports.length)return;
+ const section=document.createElement('section');section.className='warranty-result';const title=document.createElement('h3');title.textContent='ประวัติรายงานบริการ';section.append(title);
+ reports.forEach(r=>{if(!/^[A-Za-z0-9_-]{1,80}$/.test(r.id||''))return;const line=document.createElement('p'),link=document.createElement('a');link.className='text-link';link.textContent=(r.number||'Report')+' · '+(r.date||'')+' · '+(r.type==='service'?'Service Record':'General Job Sheet')+' →';link.href='service-report.html?id='+encodeURIComponent(r.id)+'&serial='+encodeURIComponent(serial);line.append(link);section.append(line);});result.append(section);
+}
